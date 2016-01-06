@@ -1,0 +1,83 @@
+<div class="profile"> 
+	<header></header>
+	<div class="row">
+		<div class="col-sm-12"><b>We want to know More about you!</b></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Gender</div>
+		<div class="col-sm-4">
+			<select id="gender" ng-disabled="profile.disabled" class="form-control" 
+				ng-model="profile.profile.physicalAppearance.gender" 
+				ng-class="{'has-error': !profile.profile.physicalAppearance.gender&&profile.validate}">
+				<option ng-repeat="opt in profile.likes.genders">{{opt}}</option>
+			</select>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Interested In:</div>
+		<div class="col-sm-4">
+			<select id="interestedIn" ng-disabled="profile.disabled" class="form-control" ng-model="profile.profile.interestedIn"
+			ng-class="{'has-error': !profile.profile.interestedIn&&profile.validate}">
+				<option ng-repeat="opt in profile.likes.interestedIn">{{opt}}</option>
+			</select>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12"><b>Physical Appearence</b></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Height:</div>
+		<div class="col-sm-4">
+			<input id="height" ng-disabled="profile.disabled" type="number" min="0" max="500" class="form-control" 
+			ng-class="{'has-error': !profile.profile.physicalAppearance.height&&profile.validate}"
+				ng-model="profile.profile.physicalAppearance.height"/>cm
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Weight:</div>
+		<div class="col-sm-4">
+			<input id="weight" ng-disabled="profile.disabled"  type="number" min="0" max="500" class="form-control" 
+			ng-class="{'has-error': !profile.profile.physicalAppearance.weight&&profile.validate}"
+				ng-model="profile.profile.physicalAppearance.weight"/>kg
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Nationality:</div>
+		<div class="col-sm-4">
+			<select id="country" ng-disabled="profile.disabled"  class="form-control" ng-model="profile.profile.physicalAppearance.country"
+			ng-class="{'has-error': !profile.profile.physicalAppearance.country&&profile.validate}">
+				<option ng-repeat="opt in profile.likes.countries">{{opt}}</option>
+			</select>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12"><b>Interests</b></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Movies:</div>
+		<div class="col-sm-4 multiple-checkboxes">
+			<label ng-repeat="opt in profile.likes.movies track by $index"><input ng-disabled="profile.disabled"  type="checkbox" value="">{{opt}}</label>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">Music:</div>
+		<div class="col-sm-4 multiple-checkboxes">
+			<label ng-repeat="opt in profile.likes.music track by $index"><input ng-disabled="profile.disabled"  type="checkbox" value="">{{opt}}</label>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">TV Series:</div>
+		<div class="col-sm-4 multiple-checkboxes">
+			<label ng-repeat="opt in profile.likes.tvSeries track by $index"><input ng-disabled="profile.disabled"  type="checkbox" value="">{{opt}}</label>
+		</div>
+		<div class="col-sm-4"></div>
+	</div>
+	<button type="button" ng-disabled="profile.disabled" class="btn btn-primary track by $index" ng-click="save()">Save</button>
+</div>

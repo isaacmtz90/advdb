@@ -12,3 +12,108 @@ body {
 	height: 100%;
 	width: 100%;
 }
+
+.text-right {
+	text-align: right;
+}
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+
+.header {
+	padding: 5px;
+	background-color: black;
+	color: white;
+}
+
+.header .profile-pic {
+	width: 40px;
+	height: 40px;
+	background-color: red;
+	border: 2px solid white;
+    border-radius: 20px;
+    background-position: center center;
+    background-size: 100% 100%;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.inline-block > div {
+	display: inline-block;
+}
+
+.header .profile-name {
+	padding-right: 10px;
+}
+
+.table-vertical {
+	display: table;
+}
+
+.table-vertical > div {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.profile .multiple-checkboxes label {
+	margin-right: 10px;
+}
+
+.profile .multiple-checkboxes {
+	font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	height: 200px;
+	overflow: auto;
+}
+
+.has-error,
+.input-validation-error {
+   border: 1px solid #f44336 !important;
+   -webkit-box-shadow: none !important;
+   -ms-box-shadow: none !important;
+   box-shadow: none !important;
+}
+
+.card {
+	width: 222px;
+    height: 40px;
+    background-color: #EEEEEE;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 10px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.card .card-picture {
+	width: 40px;
+	height: 40px;
+	border: 1px solid black;
+	background-size: 100% 100%;
+	background-position: center center;
+}
+
+.card > div {
+	display: inline-block;
+}
+
+.card > button {
+	margin-left: 10px;
+}
