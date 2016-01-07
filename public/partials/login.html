@@ -1,4 +1,53 @@
 <div>
-	Match
-	<fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();"></fb:login-button>
+	<header nouser></header>
+	<div class="section no-pad-bot" id="index-banner">
+		<div class="container">
+			<br><br>
+			<h1 class="header center red-text text-lighten-1">Match FB</h1>
+			<div class="row center">
+				<h5 class="header col s12 light">A simplistic app for getting your perfect match, this is Not another dating App</h5>
+			</div>
+			<div class="row center" >
+				<div ng-if="facebook_loaded" class="btn-large waves-effect waves-light indigo" 
+				onclick="fb_login()">
+					Login with Facebook
+				</div>
+				<div ng-if="!facebook_loaded" class="facebook-loader"></div>
+			</div>
+			<br><br>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="section">
+
+			<div class="row">
+				<div class="col s12 m4">
+					<div>
+						<h2 class="center red-text text-lighten-1">Fast</h2>
+						<p class="light">The fastest way for getting your perfect match! Get your perfect match now, what are you waiting? </p>
+					</div>
+				</div>
+
+				<div class="col s12 m4">
+					<div>
+						<h2 class="center red-text text-lighten-1">Safe</h2>
+						<p class="light">As simple as it sounds, your information will be safe with us, We will not send your personal information to nobody that doesn't like you.</p>
+					</div>
+				</div>
+
+				<div class="col s12 m4">
+					<div>
+						<h2 class="center red-text text-lighten-1">Easy</h2>
+						<p class="light">Just Login and try it, you will not regret. Many people had found and even get married with their perfect match using our app.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+
+		<div class="section">
+
+		</div>
+	</div>
 </div>

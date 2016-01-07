@@ -4,6 +4,11 @@
 var Controllers = angular.module('advdb.controllers', []);
 
 Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$http,Login) {
+	$scope.facebook_loaded = false;
+	Login.loaded = function(){
+		$scope.facebook_loaded = true;
+		$scope.$digest();
+	};
 	Login.success = function(){
 		console.log( Login );
 		window.location = '#/home';
@@ -95,6 +100,9 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	Data.getLikes().success(function( likes ){
 		$scope.profile.likes = likes;
 		$scope.$digest();
+		setTimeout(function(){
+			$('select').material_select();
+		});
 	});
 }]);
 

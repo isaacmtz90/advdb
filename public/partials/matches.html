@@ -1,21 +1,64 @@
 <div>
 	<header></header>
-	<div class="row">
-		<div class="col-sm-6">
-			<div>Suggestions</div>
-			<div ng-if="suggestions.prospect" class="card table-vertical">
-				<div class="card-picture" 
-					style="background-image: url(http://graph.facebook.com/{{suggestions.prospect.id}}/picture?type=square)"></div>
-				<button ng-disabled="suggestions.disabled" class="btn btn-success" ng-click="like()">Like</button>
-				<button ng-disabled="suggestions.disabled" class="btn btn-danger" ng-click="dislike()">Dislike</button>
+
+	<div class="container">
+		<div class="section">
+			<div class="row">
+				<h1 class="header center red-text text-lighten-1">Suggestions</h1>
+			</div>
+			<div class="row">
+				<div class="col s12 m2">
+					<span style="opacity: 0">X</span>
+				</div>
+				<div class="col s12 m8">
+					<div class="card" ng-if="suggestions.prospect">
+						<div class="card-image">
+							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.prospect.id}}/picture?width=1000&height=800)"></div>
+						</div>
+						<div class="card-content">
+							<p>Likes.</p>
+						</div>
+						<div class="card-action">
+							<button class="btn waves-effect waves-light btn-large left" 
+							 	ng-disabled="profile.disabled" class="btn btn-primary track by $index" ng-click="like()">Like
+								<i class="material-icons right">done</i>
+							</button>
+							<button class="btn waves-effect waves-light btn-large right red darken-3" 
+							 	ng-disabled="profile.disabled" class="btn btn-primary track by $index" ng-click="dislike()">Dislike
+								<i class="material-icons right">clear</i>
+							</button>
+						</div>
+					</div>
+					<div ng-if="!suggestions.prospect" class="card loading-card">
+					</div>
+				</div>
+				<div class="col s12 m2">
+					<span style="opacity: 0">X</span>
+				</div>
 			</div>
 		</div>
-		<div class="col-sm-6">
-			<div>Matches</div>
-			<div class="card table-vertical" ng-repeat="item in suggestions.matches track by $index">
-				<div class="card-picture" 
-					style="background-image: url(http://graph.facebook.com/{{item.id}}/picture?type=square)"></div>
-				<button fid="{{item.id}}" class="btn btn-primary" ng-click="profile(this)">Check Profile</button>
+		<div class="section">
+			<div class="row">
+				<h1 class="header center red-text text-lighten-1">Matches</h1>
+			</div>
+			<div class="row">
+				<div class="col s12 m3" ng-repeat="item in suggestions.matches track by $index">
+					<div class="card">
+						<div class="card-image">
+							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{item.id}}/picture?width=1000&height=800)"></div>
+						</div>
+						<div class="card-content">
+							<p>Likes.</p>
+						</div>
+						<div class="card-action">
+							<button class="btn waves-effect waves-light btn-large right indigo" 
+							 	ng-disabled="profile.disabled" class="btn btn-primary track by $index" 
+							 	ng-click="profile(this)">Check Profile
+								<i class="material-icons right">send</i>
+							</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

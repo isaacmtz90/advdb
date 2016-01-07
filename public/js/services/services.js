@@ -54,6 +54,18 @@ Services.service('Login',function(){
 			xfbml: true,
 			version: 'v2.5'
 		});
+
+		FB.getLoginStatus(function(response){
+	    	result.loaded();
+	    });
+	};
+
+	window.fb_login = function(){
+	    FB.login(function(response) {
+	    	window.checkLoginState();
+	    }, {
+	        scope: 'public_profile,email,user_friends'
+	    });
 	};
 
 	(function(d, s, id){
@@ -90,24 +102,25 @@ Services.service('Data',function(){
 	};
 
 	var _fakeUSer = {
-		id: "10153733372723548",
-		name: "Carlos Sanchez",
-		interestedIn: "female",
-		physicalAppearance: {
-			gender: "male",
-			height: 172,
-			weight: 80,
-			country: "Honduras"
+		"id": "10153733372723548",
+		"name": "Carlos Sanchez",
+		"interestedIn": "female",
+		"physicalAppearance": {
+			"gender": "male",
+			"height": 172,
+			"weight": 80,
+			"country": "Honduras"
 		},
-		likes: {
-			movies: ["Dawn of The Dead","Star Wars"],
-			music: ["Red Hot Chilli Peppers","Disturbed"],
-			tvSeries: []
+		"likes": {
+			"movies": ["Dawn of The Dead","Star Wars"],
+			"music": ["Red Hot Chilli Peppers","Disturbed"],
+			"tvSeries": []
 		}
 	};
 
 
 	var Data = {
+		//first endpoint to get the user data
 		sendUser: function( user ){
 			console.log('UserID',user.id);
 			var endpoint = new_Endpoint();
@@ -120,12 +133,12 @@ Services.service('Data',function(){
 		getLikes: function(){
 			var endpoint = new_Endpoint();
 			endpoint._fakeResponse({
-				genders: ["male","female","other"], 
-				interestedIn: ["male","female","other","all"], 
-				movies: ["Titanic","Star Wars","Dawn of the Dead"],
-				tvSeries: ["Lost","The Walking Dead","The Simpsons"],
-				music: ["The beatles","Disturbed","Slipknot"],
-				countries: ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
+				"genders": ["male","female","other"], 
+				"interestedIn": ["male","female","other","all"], 
+				"movies": ["Titanic","Star Wars","Dawn of the Dead"],
+				"tvSeries": ["Lost","The Walking Dead","The Simpsons"],
+				"music": ["The beatles","Disturbed","Slipknot"],
+				"countries": ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
 			});
 			return endpoint;
 		},
@@ -142,17 +155,17 @@ Services.service('Data',function(){
 			console.log('UserID',id, filters);
 			var endpoint = new_Endpoint();
 			endpoint._fakeResponse({
-				suggestions: [{
-					id:'100000304973925'
+				"suggestions": [{
+					"id":'100000304973925'
 				},{
-					id:'100000170168144'
+					"id":'100000170168144'
 				},{
-					id:'502184878'
+					"id":'502184878'
 				},{
-					id:'100001524085465'
+					"id":'100001524085465'
 				}],
-				matches: [{
-					id:'574890965'
+				"matches": [{
+					"id":'574890965'
 				}]
 			});
 			return endpoint;
