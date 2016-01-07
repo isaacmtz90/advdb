@@ -1,13 +1,19 @@
 <div class="row header">
-	<div class="col-sm-4 inline-block text-left">
-		
-	</div>
-	<div class="col-sm-4 inline-block text-center">
-		
-	</div>
-	<div class="col-sm-4 table-vertical text-right ">
-		<div class="profile-name">{{data.user.name}}</div>
-		<div class="profile-pic" style="background-image: url({{data.user.profilePic}})" 
-			onclick="window.location='#/profile'"></div>
-	</div>
+	<nav ng-if="noLogin" class="red lighten-1" role="navigation">
+		<div class="nav-wrapper container">
+			<span id="logo-container" class="brand-logo">Logo</span>
+		</div>
+	</nav>
+	<nav ng-if="!noLogin" class="red lighten-1" role="navigation">
+		<div class="nav-wrapper container">
+			<a id="logo-container" href="#home" class="brand-logo">Logo</a>
+			<div class="right head-profile">
+				<span class="profile-name">{{data.user.name}}</span>
+				<span class="profile-pic-container">
+					<span class="profile-pic" style="background-image: url({{data.user.profilePic}})" 
+						onclick="window.location='#/profile'"></span>
+				</span>
+			</div>
+		</div>
+	</nav>
 </div>

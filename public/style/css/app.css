@@ -23,21 +23,25 @@ body {
 	text-align: left;
 }
 
-.header {
-	padding: 5px;
-	background-color: black;
-	color: white;
+.head-profile {
+	width: 100%;
+	text-align: right;
 }
 
-.header .profile-pic {
+.profile-name {
+	padding-right: 10px;
+}
+
+.profile-pic {
+	position: relative;
+	top: 12px;
+	display: inline-block;
 	width: 40px;
 	height: 40px;
-	background-color: red;
 	border: 2px solid white;
     border-radius: 20px;
     background-position: center center;
     background-size: 100% 100%;
-    margin-left: 10px;
     cursor: pointer;
 }
 
@@ -45,75 +49,62 @@ body {
 	display: inline-block;
 }
 
-.header .profile-name {
-	padding-right: 10px;
+.option-1 , .option-2 {
+	height: 100%;
 }
 
-.table-vertical {
-	display: table;
+.option-1 {
+	background-color: grey;
 }
 
-.table-vertical > div {
-	display: table-cell;
-	vertical-align: middle;
+.option-2 {
+	background-color: grey;	
 }
 
-.profile .multiple-checkboxes label {
-	margin-right: 10px;
-}
-
-.profile .multiple-checkboxes {
-	font-size: 14px;
-    line-height: 1.42857143;
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-	height: 200px;
-	overflow: auto;
-}
-
-.has-error,
-.input-validation-error {
-   border: 1px solid #f44336 !important;
-   -webkit-box-shadow: none !important;
-   -ms-box-shadow: none !important;
-   box-shadow: none !important;
-}
-
-.card {
-	width: 222px;
-    height: 40px;
-    background-color: #EEEEEE;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 20px;
-    margin: 10px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-}
-
-.card .card-picture {
-	width: 40px;
-	height: 40px;
-	border: 1px solid black;
-	background-size: 100% 100%;
-	background-position: center center;
-}
-
-.card > div {
+.facebook-loader {
 	display: inline-block;
+	background-image: url(../../img/ajax-loader.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 54px;
+	height: 54px;
 }
 
-.card > button {
-	margin-left: 10px;
+.card.clickable-card {
+	cursor: pointer;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
+	-ms-transform: scale(1);
+   	-webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.clickable-card:hover {
+	-ms-transform: scale(1.05);
+   	-webkit-transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+.match-pitct {
+	display: inline-block;
+	height: 300px;
+	width: 100%;
+	background-size: auto 100%;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-color: black;
+}
+
+.card .card-action {
+    height: 96px;
+}
+
+.loading-card {
+	height: 490px;
+	background-image: url(../../img/ajax-loader2.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
 }
