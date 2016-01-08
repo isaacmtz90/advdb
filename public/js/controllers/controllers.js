@@ -9,12 +9,6 @@ Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$h
 		$scope.facebook_loaded = true;
 		$scope.$digest();
 	};
-	Login.success = function(){
-		window.location = '#/home';
-	};
-	Login.fail = function(){
-		alert('fail');
-	};
 }]);
 
 Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
@@ -95,6 +89,29 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		});
 	};	
 
+	window._X = $scope;
+	$scope.likeInterest = function( type , id ){
+		var interest = $scope.profile.likes[type][id];
+		Data.interest( Login.user.id , type , interest , false ).success(function( response ){
+			if( response.success ){
+				$scope.profile.profile.likes[type].push(interest);
+				$scope.$digest();
+			}
+		});
+	};
+
+	$scope.dislikeInterest = function( type , id ){
+		var interest = $scope.profile.likes[type][id];
+		Data.interest( Login.user.id , type , interest , true ).success(function( response ){
+			if( response.success ){
+				$scope.profile.profile.likes[type] = $scope.profile.profile.likes[type].filter(function(a){
+					return a != interest;
+				});
+				$scope.$digest();
+			}
+		});
+	};
+
 	Data.getLikes().success(function( likes ){
 		$scope.profile.likes = likes;
 		$scope.$digest();
@@ -116,7 +133,7 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 
 	$scope.like = function(){
 		$scope.suggestions.disabled = true;
-		Data.like( Login.user.id , $scope.suggestions.prospect.id ).success(function(){
+		Data.like( Login.user.id , $scope.suggestions.prospect.id , false ).success(function(){
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 			$scope.suggestions.disabled = false;
 			$scope.$digest();
@@ -130,13 +147,14 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 		$scope.suggestions.disabled = true;
 		Data.like( Login.user.id , $scope.suggestions.prospect.id , true ).success(function(){
 			$scope.suggestions.suggestions = $scope.suggestions.suggestions.filter(function(a){
-				$scope.suggestions.disabled = false;
-				$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
-				$scope.$digest();
-				if( !$scope.suggestions.prospect ){
-					//get more suggestions
-				}
+				return a != $scope.suggestions.prospect.id;
 			});
+			$scope.suggestions.disabled = false;
+			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
+			$scope.$digest();
+			if( !$scope.suggestions.prospect ){
+				//get more suggestions
+			}
 		});
 	};
 

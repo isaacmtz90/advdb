@@ -10,6 +10,7 @@ var Services = angular.module('advdb.services', []);
 
 Services.service('Login',function(){
 	var result = {
+		ready: false,
 		user: undefined,
 		scopes: [],
 		registerScope: function( scope ){
@@ -30,6 +31,7 @@ Services.service('Login',function(){
 				    	} 
 				    }
 				);
+				result.ready = true;
 				if( result.success )
 					result.success();
 			});
@@ -112,9 +114,8 @@ Services.service('Data',function(){
 			"country": "Honduras"
 		},
 		"likes": {
-			"movies": ["Dawn of The Dead","Star Wars"],
-			"music": ["Red Hot Chilli Peppers","Disturbed"],
-			"tvSeries": []
+			"movies": ["Dawn of the Dead","Star Wars"],
+			"tvSeries": ["The Simpsons","Vikings"]
 		}
 	};
 
@@ -135,9 +136,8 @@ Services.service('Data',function(){
 			endpoint._fakeResponse({
 				"genders": ["male","female","other"], 
 				"interestedIn": ["male","female","other","all"], 
-				"movies": ["Titanic","Star Wars","Dawn of the Dead"],
-				"tvSeries": ["Lost","The Walking Dead","The Simpsons"],
-				"music": ["The beatles","Disturbed","Slipknot"],
+				"movies": ["Titanic","Star Wars","Dawn of the Dead","Wall-E","Toy Story","Tropa de Elite"],
+				"tvSeries": ["Lost","The Walking Dead","The Simpsons","Futurama","Pokemon","Family Guy","Vikings"],
 				"countries": ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
 			});
 			return endpoint;
@@ -171,11 +171,17 @@ Services.service('Data',function(){
 			return endpoint;
 		},
 		like: function( userId , otehrId , dislike ){
-			console.log('UserID',userId, otehrId);
 			var endpoint = new_Endpoint();
 			endpoint._fakeResponse({
 				success: true,
 				match: true
+			});
+			return endpoint;
+		},
+		interest: function( userId , type , name , dislike ){
+			var endpoint = new_Endpoint();
+			endpoint._fakeResponse({
+				success: true
 			});
 			return endpoint;
 		}
