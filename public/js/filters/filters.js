@@ -65,3 +65,19 @@ Filters.filter('lsort',function(){
 		});
 	};
 });
+
+Filters.filter('interestsort',function(){
+	return function(objArray, type , profile ){
+		if( objArray )
+			return objArray.sort(function(a,b){
+				if( profile.likes[type].indexOf(a)!=-1 && profile.likes[type].indexOf(b)==-1 ){
+					return -1;
+				}
+				if( profile.likes[type].indexOf(a)==-1 && profile.likes[type].indexOf(b)!=-1 ){
+					return 1
+				}
+				return b<a?1:-1;
+			});
+		return objArray;
+	};
+});

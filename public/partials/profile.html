@@ -1,13 +1,16 @@
-<div> 
+<div class="profile"> 
 	<header></header>
 	<div class="container">
 		<div class="section">
 			<ul class="tabs">
-				<li class="tab col s6">
+				<li class="tab col s4">
 					<a href="#profile">Profile Information</a>
 				</li>
-				<li class="tab col s6">
-					<a href="#interests">Interests</a>
+				<li class="tab col s4">
+					<a href="#movies">Movies</a>
+				</li>
+				<li class="tab col s4">
+					<a href="#tvshows">TV Shows</a>
 				</li>
 			</ul>
 			<br><br>
@@ -68,43 +71,72 @@
 						<label for="country">Nationality</label>
 					</div>
 				</div>
-			</div>
-			<div id="interests">
 				<div class="row">
-					<div class="col s12 m12"><b>Interests</b></div>
-				</div>
-				<div class="row">
-					<div class="col s2">Movies</div>
-					<div class="col s10 multiple-checkboxes">
-						<div class="col s2" 
-							ng-repeat="opt in profile.likes.movies track by $index" >
-							<input id="mo{{$index}}" 
-								ng-disabled="profile.disabled" 
-								type="checkbox" class="filled-in" id="filled-in-box"/>
-		      				<label for="mo{{$index}}">{{opt}}</label>
-		      			</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col s2">TV Shows</div>
-					<div class="col s10 multiple-checkboxes">
-						<div class="col s2" 
-							ng-repeat="opt in profile.likes.tvSeries track by $index" >
-							<input id="tv{{$index}}" 
-								ng-disabled="profile.disabled" 
-								type="checkbox" class="filled-in" id="filled-in-box"/>
-		      				<label for="tv{{$index}}">{{opt}}</label>
-		      			</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="section">
-			<div class="row">
 				<button class="btn waves-effect waves-light btn-large right" 
 				 	ng-disabled="profile.disabled" class="btn btn-primary track by $index" ng-click="save()">Save
 					<i class="material-icons right">done</i>
 				</button>
+			</div>
+			</div>
+			<div id="movies">
+				<div class="row">
+					<div class="col s12 m12"><b>Movies</b></div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="col s3" 
+							ng-repeat="opt in profile.likes.movies|interestsort:'movies':profile.profile track by $index" >
+							<div id="mo{{$index}}" class="card">
+								<div class="card-image">
+									<div class="interest-pict" 
+										style="background-image: url(public/img/movie.png);">
+									</div>
+								</div>
+								<div class="card-content">
+									<p>{{opt}}</p>
+									<a ng-if="profile.profile.likes.movies.indexOf(opt)==-1" 
+									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies',$index);">
+										<i class="material-icons">add</i>
+									</a>
+									<a ng-if="profile.profile.likes.movies.indexOf(opt)!=-1" asd
+									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('movies',$index);">
+										<i class="material-icons">remove</i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="tvshows">
+				<div class="row">
+					<div class="col s12 m12"><b>TV Shows</b></div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="col s3" 
+							ng-repeat="opt in profile.likes.tvSeries|interestsort:'tvSeries':profile.profile track by $index" >
+							<div id="mo{{$index}}" class="card">
+								<div class="card-image">
+									<div class="interest-pict" 
+										style="background-image: url(public/img/tvshow.png);">
+									</div>
+								</div>
+								<div class="card-content">
+									<p>{{opt}}</p>
+									<a ng-if="profile.profile.likes.tvSeries.indexOf(opt)==-1" 
+									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('tvSeries',$index);">
+										<i class="material-icons">add</i>
+									</a>
+									<a ng-if="profile.profile.likes.tvSeries.indexOf(opt)!=-1" asd
+									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('tvSeries',$index);">
+										<i class="material-icons">remove</i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

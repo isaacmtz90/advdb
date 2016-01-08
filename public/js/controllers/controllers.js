@@ -95,6 +95,29 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		});
 	};	
 
+	window._X = $scope;
+	$scope.likeInterest = function( type , id ){
+		var interest = $scope.profile.likes[type][id];
+		Data.interest( Login.user.id , type , interest , false ).success(function( response ){
+			if( response.success ){
+				$scope.profile.profile.likes[type].push(interest);
+				$scope.$digest();
+			}
+		});
+	};
+
+	$scope.dislikeInterest = function( type , id ){
+		var interest = $scope.profile.likes[type][id];
+		Data.interest( Login.user.id , type , interest , true ).success(function( response ){
+			if( response.success ){
+				$scope.profile.profile.likes[type] = $scope.profile.profile.likes[type].filter(function(a){
+					return a != interest;
+				});
+				$scope.$digest();
+			}
+		});
+	};
+
 	Data.getLikes().success(function( likes ){
 		$scope.profile.likes = likes;
 		$scope.$digest();
