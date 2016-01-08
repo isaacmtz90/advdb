@@ -10,8 +10,7 @@ class Person(Resource):
     def __init__(self):
         #Request parser to get the params in a sexy way
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('person_id', type=long,
-                                   required=True, location='json')
+        self.reqparse.add_argument('person_id', type=str, location='json')
         self.reqparse.add_argument('email', type=str, required=True,
                                    location='json')
         self.reqparse.add_argument('name', type=str, location='json',
@@ -30,7 +29,7 @@ class Person(Resource):
         user = graph.find_one('Person', property_key='person_id',
                               property_value=id)
         if not user:
-            abort(404)
+            abort(404, message="The requested user doesn't exist")
         return user.properties
 
     def put(self, id):
