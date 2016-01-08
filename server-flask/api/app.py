@@ -40,9 +40,9 @@ class TestAPI(Resource):
         pass
 
 
-api.add_resource(person.Person, '/users/<str:id>', endpoint='users')
-api.add_resource(movie.Movie, '/movies/<str:id>', endpoint='movies')
-api.add_resource(tvshow.TV_Show, '/tv_shows/<str:id>', endpoint='tv_show')
+api.add_resource(person.Person, '/users/<string:id>', endpoint='users')
+api.add_resource(movie.Movie, '/movies/<string:id>', endpoint='movies')
+api.add_resource(tvshow.TV_Show, '/tv_shows/<string:id>', endpoint='tv_show')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 print 'resource url created'
 

@@ -29,7 +29,7 @@ class Person(Resource):
         user = graph.find_one('Person', property_key='person_id',
                               property_value=id)
         if not user:
-            abort(404)
+            abort(404, message="The requested user doesn't exist")
         return user.properties
 
     def put(self, id):
