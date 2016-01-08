@@ -4,7 +4,7 @@
 from flask import Flask, jsonify, abort, make_response, request
 from flask.ext.restful import Api, Resource, reqparse, fields, marshal
 
-from resources import person, movie, tvshow
+from resources import person, movie, tvshow, likes
 
 
 import data_types
@@ -40,9 +40,10 @@ class TestAPI(Resource):
         pass
 
 
-api.add_resource(person.Person, '/users/<string:id>', endpoint='users')
-api.add_resource(movie.Movie, '/movies/<string:id>', endpoint='movies')
-api.add_resource(tvshow.TV_Show, '/tv_shows/<string:id>', endpoint='tv_show')
+api.add_resource(person.Person, '/user/<string:id>', endpoint='user')
+api.add_resource(movie.Movie, '/movie/<string:id>', endpoint='movie')
+api.add_resource(tvshow.TV_Show, '/tv_show/<string:id>', endpoint='tv_show')
+api.add_resource(likes.Connect, '/add_like/<string:id>', endpoint='likes')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 print 'resource url created'
 
