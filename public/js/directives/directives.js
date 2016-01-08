@@ -22,11 +22,9 @@ Directives.directive("header", [function () {
         templateUrl: 'public/partials/header.html',
         scope: {},
         link: function (scope, element, attributes) {
-            console.log( attributes );
             if( attributes.hasOwnProperty('nouser')){
                 scope.noLogin = true;
             }
-            window._X = scope;
         },
         controller: ['$scope','Login',function($scope,Login){
             if( !$scope.noLogin ){
@@ -36,10 +34,6 @@ Directives.directive("header", [function () {
             		user: Login.user,
                     Login: Login
             	};
-                
-            	$scope.$watch('data.user.profilePic',function(){
-                    console.log(arguments);
-                });
             }
         }]
     }

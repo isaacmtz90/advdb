@@ -10,7 +10,6 @@ Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$h
 		$scope.$digest();
 	};
 	Login.success = function(){
-		console.log( Login );
 		window.location = '#/home';
 	};
 	Login.fail = function(){
@@ -20,7 +19,6 @@ Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$h
 
 Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
 	if( !Login.user.profile ){
-		console.log(Login.user,"????");
 		Data.sendUser(Login.user).success(function( response ){
 			if( response.user.name ){
 				Login.user.profile = response.user;
@@ -102,6 +100,7 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		$scope.$digest();
 		setTimeout(function(){
 			$('select').material_select();
+			$('ul.tabs').tabs();
 		});
 	});
 }]);
@@ -144,7 +143,6 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 	$scope.profile = function( element ){
 		window.open( 'http://www.facebook.com/' + element.item.id );
 	};
-
 
 	Data.getMatches( Login.user.id , {} ).success(function( response ){
 		$scope.suggestions.suggestions = response.suggestions;
