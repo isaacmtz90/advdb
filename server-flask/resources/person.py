@@ -10,7 +10,7 @@ class Person(Resource):
     def __init__(self):
         #Request parser to get the params in a sexy way
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('person_id', type=str,
+        self.reqparse.add_argument('person_id', type=long,
                                    required=True, location='json')
         self.reqparse.add_argument('email', type=str, required=True,
                                    location='json')
@@ -28,7 +28,7 @@ class Person(Resource):
     @marshal_with(data_types.user_fields)
     def get(self, id):
         user = graph.find_one('Person', property_key='person_id',
-                              property_value=str(id))
+                              property_value=id)
         if not user:
             abort(404)
         return user.properties
@@ -36,9 +36,9 @@ class Person(Resource):
     def put(self, id):
         args = self.reqparse.parse_args()
         user = graph.find_one('Person', property_key='person_id',
-                              property_value=str(id))
+                              property_value=id)
         if user:
-            user.properties['person_id']=str(id)
+            user.properties['person_id']=id
             user.properties['email']=args['email']
             user.properties['name']=args['name']
             user.properties['gender']=args['gender']
@@ -50,7 +50,7 @@ class Person(Resource):
         else:
             newPerson = Node(
                 'Person',
-                person_id=str(id),
+                person_id=id,
                 email=args['email'],
                 name=args['name'],
                 gender=args['gender'],
@@ -68,13 +68,13 @@ class Person(Resource):
     def post(self, id):
         args = self.reqparse.parse_args()
         user = graph.find_one('Person', property_key='person_id',
-                              property_value= str(id))
+                              property_value= id)
         if user:
             return user.properties
         else:
             newPerson = Node(
                 'Person',
-                person_id=str(id),
+                person_id=id,
                 email=args['email'],
                 name=args['name'],
                 gender=args['gender'],
