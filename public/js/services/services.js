@@ -10,6 +10,7 @@ var Services = angular.module('advdb.services', []);
 
 Services.service('Login',function(){
 	var result = {
+		ready: false,
 		user: undefined,
 		scopes: [],
 		registerScope: function( scope ){
@@ -30,6 +31,7 @@ Services.service('Login',function(){
 				    	} 
 				    }
 				);
+				result.ready = true;
 				if( result.success )
 					result.success();
 			});

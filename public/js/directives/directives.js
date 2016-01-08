@@ -16,25 +16,27 @@ Directives.directive("advdb", [function () {
     }
 }]);
 
-Directives.directive("header", [function () {
+Directives.directive("matchHeader", [function () {
     return {
         restrict: 'E',
         templateUrl: 'public/partials/header.html',
         scope: {},
         link: function (scope, element, attributes) {
-            if( attributes.hasOwnProperty('nouser')){
-                scope.noLogin = true;
-            }
+            scope.noLogin = true;
         },
         controller: ['$scope','Login',function($scope,Login){
-            if( !$scope.noLogin ){
-                Login.registerScope($scope);
-
-            	$scope.data = {
-            		user: Login.user,
+            Login.registerScope($scope);
+            Login.success = function(){
+                $scope.noLogin = false;
+                $scope.data = {
+                    user: Login.user,
                     Login: Login
-            	};
-            }
+                };
+                window.location = '#/home';
+            };
+            Login.fail = function(){
+                alert('fail');
+            };
         }]
     }
 }]);
