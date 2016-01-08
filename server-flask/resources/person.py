@@ -10,8 +10,7 @@ class Person(Resource):
     def __init__(self):
         #Request parser to get the params in a sexy way
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('person_id', type=long,
-                                   required=True, location='json')
+        self.reqparse.add_argument('person_id', type=str, location='json')
         self.reqparse.add_argument('email', type=str, required=True,
                                    location='json')
         self.reqparse.add_argument('name', type=str, location='json',

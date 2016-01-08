@@ -17,6 +17,7 @@ class Movie(Resource):
         self.reqparse.add_argument('year', type=str, location='json',
                                    required=True)
         self.reqparse.add_argument('genre', type=str, location='json')
+        self.reqparse.add_argument('picture_url', type=str, location='json')
       
         super(Movie, self).__init__()
         
@@ -31,7 +32,33 @@ class Movie(Resource):
         return movie.properties
 
     def put(self, id):
-        pass
+        args = self.reqparse.parse_args()
+        movie = graph.find_one('Movie', property_key='movie_id',
+                              property_value=id)
+        if movie:
+            movie.properties['movie_id']=id
+            movie.properties['title']=args['title']
+            movie.properties['year']=args['year']
+            movie.properties['genre']=args['genre']
+            movie.properties['picture_url'] = args ['picture_url']
+            
+            movie.push()
+            return ({"Put": movie.properties})
+        else:
+            newMovie = Node(
+                'Movie',
+                movie_id=id,
+                title=args['title'],
+                year=args['year'],
+                genre=args['genre'],
+                picture_url=args['picture_url']
+                )
+
+            try:
+                graph.create(newMovie)
+                return ({'Put Movie': newMovie.properties}, 200)
+            except:
+                return ({'error': 'Movie was not created'}, 200)
 
     def delete(self, id):
         pass

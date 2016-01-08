@@ -8,20 +8,10 @@ from resources import person, movie, tvshow
 
 
 import data_types
-
-
-######## DATABASE CONNECTION AND TYPE DEFINITION ########
-
-
     
 app = Flask(__name__, static_url_path='')
 api = Api(app)
 
-
-
-# graph.schema.create_uniqueness_constraint("User", "person_id")
-# graph.schema.create_uniqueness_constraint("Movie", "movie_id")
-# graph.schema.create_uniqueness_constraint("TV_Show", "tvshow_id")
 
 print 'connected to graph'
 
@@ -37,11 +27,6 @@ def already_exists(error):
                          422)
 
 
-
-
-
-
-
 class TestAPI(Resource):
 
     def get(self, id):
@@ -55,9 +40,9 @@ class TestAPI(Resource):
         pass
 
 
-api.add_resource(person.Person, '/users/<long:id>', endpoint='users')
-api.add_resource(movie.Movie, '/movies/<long:id>', endpoint='movies')
-api.add_resource(tvshow.TV_Show, '/tv_shows/<long:id>', endpoint='tv_show')
+api.add_resource(person.Person, '/users/<str:id>', endpoint='users')
+api.add_resource(movie.Movie, '/movies/<str:id>', endpoint='movies')
+api.add_resource(tvshow.TV_Show, '/tv_shows/<str:id>', endpoint='tv_show')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 print 'resource url created'
 
