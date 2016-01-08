@@ -28,6 +28,10 @@ body {
 	text-align: right;
 }
 
+.head-profile {
+	cursor: pointer;
+}
+
 .profile-name {
 	padding-right: 10px;
 }
@@ -42,7 +46,6 @@ body {
     border-radius: 20px;
     background-position: center center;
     background-size: 100% 100%;
-    cursor: pointer;
 }
 
 .inline-block > div {

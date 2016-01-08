@@ -7,11 +7,11 @@
 	<nav ng-if="!noLogin" class="red lighten-1" role="navigation">
 		<div class="nav-wrapper container">
 			<a id="logo-container" href="#home" class="brand-logo">Logo</a>
-			<div class="right head-profile">
+			<div class="right head-profile" onclick="window.location='#/profile'">
 				<span class="profile-name">{{data.user.name}}</span>
 				<span class="profile-pic-container">
-					<span class="profile-pic" style="background-image: url({{data.user.profilePic}})" 
-						onclick="window.location='#/profile'"></span>
+					<span class="profile-pic" style="background-image: url({{data.user.profilePic}})">
+					</span>
 				</span>
 			</div>
 		</div>
