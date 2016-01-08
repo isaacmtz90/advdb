@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, abort, make_response, request
-from flask.ext.restful import Resource, reqparse, fields, marshal
-from database import graphene
+from flask.ext.restful import Resource, reqparse, fields, marshal, marshal_with
+from database import graphene, data_types
 from py2neo import Node, Relationship
 graph = graphene.get_database()
 
@@ -8,9 +8,9 @@ graph = graphene.get_database()
 class Person(Resource):
 
     def __init__(self):
-
+        #Request parser to get the params in a sexy way
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('person_id', type=str,
+        self.reqparse.add_argument('person_id', type=long,
                                    required=True, location='json')
         self.reqparse.add_argument('email', type=str, required=True,
                                    location='json')
@@ -24,23 +24,33 @@ class Person(Resource):
                                    default=160)
         self.reqparse.add_argument('likes')
         super(Person, self).__init__()
-
+    
+    @marshal_with(data_types.user_fields)
     def get(self, id):
         user = graph.find_one('Person', property_key='person_id',
-                              property_value=str(id))
+                              property_value=id)
         if not user:
             abort(404)
         return user.properties
 
     def put(self, id):
         args = self.reqparse.parse_args()
-        user = graph.merge_one('Person', 'person_id', args['person_id'])
+        user = graph.find_one('Person', property_key='person_id',
+                              property_value=id)
         if user:
-            return user.properties
+            user.properties['person_id']=id
+            user.properties['email']=args['email']
+            user.properties['name']=args['name']
+            user.properties['gender']=args['gender']
+            user.properties['age']=args['age']
+            user.properties['interested_in']=args['interested_in']
+            user.properties['height']=args['height']
+            user.push()
+            return ({"Put": user.properties})
         else:
             newPerson = Node(
                 'Person',
-                person_id=args['person_id'],
+                person_id=id,
                 email=args['email'],
                 name=args['name'],
                 gender=args['gender'],
@@ -49,29 +59,22 @@ class Person(Resource):
                 height=args['height'],
                 )
 
-            # add the likes: likes= args['likes']
-            # validate if all the types and structure is correct:
-            # user_object = marshal(new_user, data_types.user_fields)
-            # print user_object
-            # store.save_unique("Person", "person_id", toInsert.person_id, toInsert)
-            # store.save(toInsert)
-
             try:
                 graph.create(newPerson)
-                return ({'created': newPerson.properties}, 200)
+                return ({'Put': newPerson.properties}, 200)
             except:
                 return ({'error': 'User was not created'}, 200)
 
     def post(self, id):
         args = self.reqparse.parse_args()
         user = graph.find_one('Person', property_key='person_id',
-                              property_value=args['person_id'])
+                              property_value= id)
         if user:
             return user.properties
         else:
             newPerson = Node(
                 'Person',
-                person_id=args['person_id'],
+                person_id=id,
                 email=args['email'],
                 name=args['name'],
                 gender=args['gender'],
@@ -80,13 +83,6 @@ class Person(Resource):
                 height=args['height'],
                 likes=args['likes'],
                 )
-
-            # add the likes: likes= args['likes']
-            # validate if all the types and structure is correct:
-            # user_object = marshal(new_user, data_types.user_fields)
-            # print user_object
-            # store.save_unique("Person", "person_id", toInsert.person_id, toInsert)
-            # store.save(toInsert)
 
             graph.create(newPerson)
             return ({'created': newPerson.properties}, 200)

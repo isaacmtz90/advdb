@@ -55,9 +55,9 @@ class TestAPI(Resource):
         pass
 
 
-api.add_resource(person.Person, '/users/<int:id>', endpoint='users')
-api.add_resource(movie.Movie, '/movies/<int:id>', endpoint='movies')
-api.add_resource(tvshow.TV_Show, '/tv_shows/<int:id>', endpoint='tv_show')
+api.add_resource(person.Person, '/users/<long:id>', endpoint='users')
+api.add_resource(movie.Movie, '/movies/<long:id>', endpoint='movies')
+api.add_resource(tvshow.TV_Show, '/tv_shows/<long:id>', endpoint='tv_show')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 print 'resource url created'
 
