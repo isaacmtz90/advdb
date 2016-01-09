@@ -199,10 +199,11 @@ Services.service('Data',function($http){
 			});
 			return endpoint;
 		},
-		interest: function( userId , type , name , dislike ){
-			var endpoint = new_Endpoint();
-			endpoint._fakeResponse({
-				success: true
+		interest: function( userId , type , id , dislike ){
+			var endpoint = new_Endpoint('/add_like/' + userId );
+			endpoint.put({
+				"entity_type": type=="tvshows_liked"?"tv_show":"movie",
+				"entity_id": id
 			});
 			return endpoint;
 		}

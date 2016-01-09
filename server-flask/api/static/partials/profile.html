@@ -94,11 +94,11 @@
 								</div>
 								<div class="card-content">
 									<p>{{opt.title}}</p>
-									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)==-1" 
+									<a ng-if="!profile.profile.likes.movies_liked||profile.profile.likes.movies_liked.indexOf(opt)==-1" 
 									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies_liked',$index);">
 										<i class="material-icons">add</i>
 									</a>
-									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)!=-1" asd
+									<a ng-if="profile.profile.likes.movies_liked&&profile.profile.likes.movies_liked.indexOf(opt)!=-1" asd
 									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('movies_liked',$index);">
 										<i class="material-icons">remove</i>
 									</a>
@@ -124,11 +124,11 @@
 								</div>
 								<div class="card-content">
 									<p>{{opt.title}}</p>
-									<a ng-if="profile.profile.likes.tvshows_liked.indexOf(opt)==-1" 
+									<a ng-if="!profile.profile.likes.tvshows_liked||profile.profile.likes.tvshows_liked.indexOf(opt)==-1" 
 									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('tvshows_liked',$index);">
 										<i class="material-icons">add</i>
 									</a>
-									<a ng-if="profile.profile.likes.tvshows_liked.indexOf(opt)!=-1" asd
+									<a ng-if="profile.profile.likes.tvshows_liked&&profile.profile.likes.tvshows_liked.indexOf(opt)!=-1" asd
 									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('tvshows_liked',$index);">
 										<i class="material-icons">remove</i>
 									</a>

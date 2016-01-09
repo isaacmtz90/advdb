@@ -95,9 +95,14 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 
 	$scope.likeInterest = function( type , id ){
 		var interest = $scope.profile.likes[type][id];
-		Data.interest( Login.user.id , type , interest , false ).success(function( response ){
-			if( response.success ){
-				$scope.profile.profile.likes[type].push(interest);
+		var interestId = interest.tvshow_id || interest.movie_id;
+
+		Data.interest( Login.user.id , type , interestId, false ).success(function( response ){
+			if( response.data.success ){
+				if( !$scope.profile.profile.likes[type] )
+					$scope.profile.profile.likes[type] = [];
+
+				$scope.profile.profile.likes[type].push(interestId);
 				$scope.$digest();
 			}
 		});
@@ -106,7 +111,7 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	$scope.dislikeInterest = function( type , id ){
 		var interest = $scope.profile.likes[type][id];
 		Data.interest( Login.user.id , type , interest , true ).success(function( response ){
-			if( response.success ){
+			if( response.data.success ){
 				$scope.profile.profile.likes[type] = $scope.profile.profile.likes[type].filter(function(a){
 					return a != interest;
 				});
