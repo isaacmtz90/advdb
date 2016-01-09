@@ -18,36 +18,35 @@ Services.service('Login',function(){
 		}
 	};
 
+	function getUserInfo(){
+		FB.api('/me', function(response) {
+			result.user = response;
+			FB.api("/" + result.user.id + "/picture",
+			    function (response) {
+			    	if (response && !response.error) {
+			    		result.user.profilePic = response.data.url;
+			    		for( var i = 0 ; i < result.scopes.length ; i++ )
+			    			result.scopes[i].$digest();
+			    	} 
+			    }
+			);
+			result.ready = true;
+			if( result.success )
+				result.success();
+		});
+	}
+
 	function statusChangeCallback(response) {
 		if (response.status === 'connected') {
-			FB.api('/me', function(response) {
-				result.user = response;
-				FB.api("/" + result.user.id + "/picture",
-				    function (response) {
-				    	if (response && !response.error) {
-				    		result.user.profilePic = response.data.url;
-				    		for( var i = 0 ; i < result.scopes.length ; i++ )
-				    			result.scopes[i].$digest();
-				    	} 
-				    }
-				);
-				result.ready = true;
-				if( result.success )
-					result.success();
-			});
+			getUserInfo();
 		} else if (response.status === 'not_authorized') {
+			alert('not authorized');
 			if( result.fail )
 				result.fail();
 		} else {
 			if( result.fail )
 				result.fail();
 		}
-	}
-
-	window.checkLoginState = function() {
-		FB.getLoginStatus(function(response) {
-			statusChangeCallback(response);
-		});
 	}
 
 	window.fbAsyncInit = function() {
@@ -64,7 +63,9 @@ Services.service('Login',function(){
 
 	window.fb_login = function(){
 	    FB.login(function(response) {
-	    	window.checkLoginState();
+	    	FB.getLoginStatus(function(response) {
+				statusChangeCallback(response);
+			});
 	    }, {
 	        scope: 'public_profile,email,user_friends'
 	    });
@@ -81,9 +82,11 @@ Services.service('Login',function(){
 	return result;
 });
 
-Services.service('Data',function(){
-	function new_Endpoint(){
+Services.service('Data',function($http){
+	function new_Endpoint( url , post_data ){
 		return {
+			url: url,
+			post_data: post_data,
 			callback: function(){},
 			callbackError: function(){},
 			success: function( callback ){
@@ -99,6 +102,13 @@ Services.service('Data',function(){
 				setTimeout(function(){
 					_self.callback( data );
 				},1000);
+			},
+			request: function(){
+				$http.get(this.url).then(function(){
+
+				},function(){
+
+				})
 			}
 		};
 	};
@@ -119,16 +129,12 @@ Services.service('Data',function(){
 		}
 	};
 
-
 	var Data = {
 		//first endpoint to get the user data
 		sendUser: function( user ){
 			console.log('UserID',user.id);
-			var endpoint = new_Endpoint();
-			endpoint._fakeResponse({
-				success: true,
-				user: _fakeUSer
-			});
+			var endpoint = new_Endpoint('/user/'+user.id);
+			endpoint.request();
 			return endpoint;
 		},
 		getLikes: function(){

@@ -6,8 +6,14 @@ var Controllers = angular.module('advdb.controllers', []);
 Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$http,Login) {
 	$scope.facebook_loaded = false;
 	Login.loaded = function(){
-		$scope.facebook_loaded = true;
-		$scope.$digest();
+		FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				window.fb_login();
+			} else {
+				$scope.facebook_loaded = true;
+				$scope.$digest();
+			}
+		});
 	};
 }]);
 
