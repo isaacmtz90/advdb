@@ -12,7 +12,7 @@ sys.path.insert(0,parentdir)
 from flask import Flask, jsonify, abort, make_response, request
 from flask.ext.restful import Api, Resource, reqparse, fields, marshal
 
-from resources import person, movie, tvshow, likes, matches, movies
+from resources import person, movie, tvshow, likes, matches, movies, tvshows
 
 
 from database import data_types
@@ -52,6 +52,7 @@ api.add_resource(person.Person, '/user/<string:id>', endpoint='user')
 api.add_resource(movie.Movie, '/movie/<string:id>', endpoint='movie')
 api.add_resource(movies.Movies, '/movies', endpoint='movies')
 api.add_resource(tvshow.TV_Show, '/tv_show/<string:id>', endpoint='tv_show')
+api.add_resource(tvshows.TV_Shows, '/tv_shows', endpoint='tv_shows')
 api.add_resource(likes.Connect, '/add_like/<string:id>', endpoint='likes')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 api.add_resource(matches.Matching, '/matches/<string:id>', endpoint='matches')
