@@ -81,10 +81,10 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.country ){
+		/*if( !$scope.profile.profile.country ){
 			$scope.profile.showError = true;
 			return;
-		}
+		}*/
 
 		$scope.profile.disabled = true;		
 		Data.saveUser( Login.user.id , $scope.profile.profile ).success(function( response ){
