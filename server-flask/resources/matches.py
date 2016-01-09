@@ -45,11 +45,10 @@ class Matching(Resource):
                 RETURN y, movie,
                 count(movie)
                 ORDER BY count(movie) DESC"""
+
         match = cypher.execute(query, x_id = id)
-        # match = cypher.execute("""MATCH (x_id :Person {person_id:{x_id}})
-        #                     -[:LIKES]->(y) return y.name AS name""", x_id = id)
         if not match:
-            abort(404, message="The requested user doesn't exist")
+            return ({"error": "No suggestions"})
 
         results = []
         # print match["name"]
@@ -57,8 +56,9 @@ class Matching(Resource):
             # x =  record
             # results.append({"name": record.name})
         # print x[0]
-        x = match[0]
+        x = match[1]
         yo = x.movie
+        print match[0].y["name"]
         print yo["genre"]
         return results
     # def put(self, id):
