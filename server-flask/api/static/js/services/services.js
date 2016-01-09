@@ -103,12 +103,22 @@ Services.service('Data',function($http){
 					_self.callback( data );
 				},1000);
 			},
-			request: function(){
-				$http.get(this.url).then(function(){
+			get: function(){
+				$http.get(this.url).then(function( response ){
+					console.log( response );
+				},function(){
+
+				})
+			},
+			post: function( data ){
+				$http.post(this.url,data).then(function(){
 
 				},function(){
 
 				})
+			},
+			put: function( data ){
+
 			}
 		};
 	};
@@ -132,9 +142,8 @@ Services.service('Data',function($http){
 	var Data = {
 		//first endpoint to get the user data
 		sendUser: function( user ){
-			console.log('UserID',user.id);
 			var endpoint = new_Endpoint('/user/'+user.id);
-			endpoint.request();
+			endpoint.get();
 			return endpoint;
 		},
 		getLikes: function(){
