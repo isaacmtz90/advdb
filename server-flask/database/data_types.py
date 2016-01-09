@@ -8,6 +8,7 @@ movie_fields = {
     'genre': fields.String
     }
 
+
 tvshow_fields = {
     'tvshow_id': fields.String,
     'title': fields.String,
@@ -20,13 +21,22 @@ likes_fields = \
     {'movies_liked': fields.List(fields.Nested(movie_fields)),
      'tvshows_liked': fields.List(fields.Nested(tvshow_fields))}
 
+movie_list = {
+    fields.List(fields.Nested(movie_fields))    
+}
+
+tvshow_list = {
+    fields.List(fields.Nested(tvshow_fields))    
+}
+
+
 user_fields = {
     'person_id': fields.String,
     'email': fields.String,
     'name': fields.String,
     'age': fields.Boolean,
     'gender': fields.String,
-    'interested_in': fields.List(fields.String),
+    'interested_in': fields.String,
     'height': fields.String,
     'likes': fields.Nested(likes_fields)
     }
@@ -34,17 +44,17 @@ user_fields = {
 user_field = {
     'person_id': fields.String,
     'name': fields.String,
-    'age': fields.Boolean,
+    'age': fields.Integer,
     'gender': fields.String,
     'interested_in': fields.List(fields.String),
-    'height': fields.String,
+    'height': fields.Integer,
     'weight': fields.String,
     'likes': fields.Nested(likes_fields)
     }
 
 
 class Person(object):
-    def __init__(self, person_id=None, email=None,name=None, age=None, gender=None, interested_in=[], height=None, likes=None):
+    def __init__(self, person_id=None, email=None,name=None, age=None, gender=None, interested_in=None, height=None, likes=None):
         self.person_id =person_id
         self.email = email
         self.name=name
