@@ -34,23 +34,13 @@ user_fields = {
     'person_id': fields.String,
     'email': fields.String,
     'name': fields.String,
-    'age': fields.Boolean,
+    'age': fields.Integer,
     'gender': fields.String,
     'interested_in': fields.String,
     'height': fields.String,
     'likes': fields.Nested(likes_fields)
     }
     
-user_field = {
-    'person_id': fields.String,
-    'name': fields.String,
-    'age': fields.Integer,
-    'gender': fields.String,
-    'interested_in': fields.List(fields.String),
-    'height': fields.Integer,
-    'weight': fields.String,
-    'likes': fields.Nested(likes_fields)
-    }
 
 
 class Person(object):
