@@ -156,6 +156,11 @@ Services.service('Data',function($http){
 			});
 			return endpoint;
 		},
+		getMovies: function(){
+			var endpoint = new_Endpoint('/movies');
+			endpoint.get();
+			return endpoint;
+		},
 		saveUser: function( id , profile ){
 			console.log('UserID',id, profile);
 			var endpoint = new_Endpoint('/user/'+id);

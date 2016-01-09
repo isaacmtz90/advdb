@@ -115,9 +115,16 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		});
 	};
 
-	Data.getLikes().success(function( likes ){
-		$scope.profile.likes = likes;
-		$scope.$digest();
+	Data.getMovies().success(function( response ){
+		console.log( response.data.movies );
+		$scope.profile.likes = {
+			"genders": ["male","female","other"], 
+			"interested_in": ["male","female","other","all"], 
+			"movies_liked": response.data.movies,
+			"tvshows_liked": ["Lost","The Walking Dead","The Simpsons","Futurama","Pokemon","Family Guy","Vikings"],
+			"countries": ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
+		};
+
 		setTimeout(function(){
 			$('select').material_select();
 			$('ul.tabs').tabs();

@@ -85,7 +85,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in profile.likes.movies_liked|interestsort:'movies_liked':profile.profile track by $index" >
+							ng-repeat="opt in profile.likes.movies_liked track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 
@@ -93,7 +93,7 @@
 									</div>
 								</div>
 								<div class="card-content">
-									<p>{{opt}}</p>
+									<p>{{opt.title}}</p>
 									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)==-1" 
 									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies_liked',$index);">
 										<i class="material-icons">add</i>
