@@ -20,8 +20,8 @@
 				<div class="row">
 					<div class="col s12 input-field">
 						<select id="gender" ng-disabled="profile.disabled"  
-							ng-model="profile.profile.physicalAppearance.gender" 
-							ng-class="{'has-error': !profile.profile.physicalAppearance.gender&&profile.validate}">
+							ng-model="profile.profile.gender" 
+							ng-class="{'has-error': !profile.profile.gender&&profile.validate}">
 							<option ng-disabled="profile.disabled"
 							ng-repeat="opt in profile.likes.genders">{{opt}}</option>
 						</select>
@@ -30,12 +30,13 @@
 				</div>
 				<div class="row">
 					<div class="col s12 input-field">
-						<select id="interestedIn" ng-disabled="profile.disabled"  ng-model="profile.profile.interestedIn"
-						ng-class="{'has-error': !profile.profile.interestedIn&&profile.validate}">
+						<select id="interested_in" ng-disabled="profile.disabled" 
+							ng-model="profile.profile.interested_in"
+						ng-class="{'has-error': !profile.profile.interested_in&&profile.validate}">
 							<option ng-disabled="profile.disabled" 
-							ng-repeat="opt in profile.likes.interestedIn">{{opt}}</option>
+							ng-repeat="opt in profile.likes.interested_in">{{opt}}</option>
 						</select>
-						<label for="interestedIn">Interested in</label>
+						<label for="interested_in">Interested in</label>
 					</div>
 				</div>
 				<div class="row">
@@ -43,28 +44,28 @@
 				</div>
 				<div class="row">
 					<div class="col s12 input-field">
+						<input id="age" ng-disabled="profile.disabled" type="number" min="0" max="100"  
+						ng-class="{'has-error': !profile.profile.age&&profile.validate}"
+							 value="60"
+							class="ng-touched"
+							ng-model="profile.profile.age"/>
+						<label class="active" for="age">Age</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 input-field">
 						<input id="height" ng-disabled="profile.disabled" type="number" min="0" max="500"  
-						ng-class="{'has-error': !profile.profile.physicalAppearance.height&&profile.validate}"
-							placeholder="170" value="170" 
+						ng-class="{'has-error': !profile.profile.height&&profile.validate}"
+							 value="170" 
 							class="ng-touched"
-							ng-model="profile.profile.physicalAppearance.height"/>
-						<label for="height">Height (cm)</label>
+							ng-model="profile.profile.height"/>
+						<label class="active" for="height">Height (cm)</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col s12 input-field">
-						<input id="weight" ng-disabled="profile.disabled" type="number" min="0" max="500"  
-						ng-class="{'has-error': !profile.profile.physicalAppearance.weight&&profile.validate}"
-							placeholder="60" value="60"
-							class="ng-touched"
-							ng-model="profile.profile.physicalAppearance.weight"/>
-						<label for="weight">Weight (kg)</label>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col s12 input-field">
-						<select id="country" ng-disabled="profile.disabled"   ng-model="profile.profile.physicalAppearance.country"
-						ng-class="{'has-error': !profile.profile.physicalAppearance.country&&profile.validate}">
+						<select id="country" ng-disabled="profile.disabled"   ng-model="profile.profile.country"
+						ng-class="{'has-error': !profile.profile.country&&profile.validate}">
 							<option ng-repeat="opt in profile.likes.countries">{{opt}}</option>
 						</select>
 						<label for="country">Nationality</label>
@@ -84,7 +85,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in profile.likes.movies|interestsort:'movies':profile.profile track by $index" >
+							ng-repeat="opt in profile.likes.movies_liked|interestsort:'movies_liked':profile.profile track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 
@@ -93,12 +94,12 @@
 								</div>
 								<div class="card-content">
 									<p>{{opt}}</p>
-									<a ng-if="profile.profile.likes.movies.indexOf(opt)==-1" 
-									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies',$index);">
+									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)==-1" 
+									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies_liked',$index);">
 										<i class="material-icons">add</i>
 									</a>
-									<a ng-if="profile.profile.likes.movies.indexOf(opt)!=-1" asd
-									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('movies',$index);">
+									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)!=-1" asd
+									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('movies_liked',$index);">
 										<i class="material-icons">remove</i>
 									</a>
 								</div>
@@ -114,7 +115,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in profile.likes.tvSeries|interestsort:'tvSeries':profile.profile track by $index" >
+							ng-repeat="opt in profile.likes.tvshows_liked|interestsort:'tvshows_liked':profile.profile track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 
@@ -123,12 +124,12 @@
 								</div>
 								<div class="card-content">
 									<p>{{opt}}</p>
-									<a ng-if="profile.profile.likes.tvSeries.indexOf(opt)==-1" 
-									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('tvSeries',$index);">
+									<a ng-if="profile.profile.likes.tvshows_liked.indexOf(opt)==-1" 
+									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('tvshows_liked',$index);">
 										<i class="material-icons">add</i>
 									</a>
-									<a ng-if="profile.profile.likes.tvSeries.indexOf(opt)!=-1" asd
-									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('tvSeries',$index);">
+									<a ng-if="profile.profile.likes.tvshows_liked.indexOf(opt)!=-1" asd
+									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('tvshows_liked',$index);">
 										<i class="material-icons">remove</i>
 									</a>
 								</div>

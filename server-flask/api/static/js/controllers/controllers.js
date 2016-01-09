@@ -6,19 +6,27 @@ var Controllers = angular.module('advdb.controllers', []);
 Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$http,Login) {
 	$scope.facebook_loaded = false;
 	Login.loaded = function(){
-		$scope.facebook_loaded = true;
-		$scope.$digest();
+		FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				window.fb_login();
+			} else {
+				$scope.facebook_loaded = true;
+				$scope.$digest();
+			}
+		});
 	};
 }]);
 
 Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
 	if( !Login.user.profile ){
 		Data.sendUser(Login.user).success(function( response ){
-			if( response.user.name ){
-				Login.user.profile = response.user;
+			if( response.data.name ){
+				Login.user.profile = response.data;
 			}else{
 				window.location = '#/profile';
 			}
+		}).error(function(){
+			window.location = '#/profile';
 		});
 	}
 	$scope.matchNow = function(){
@@ -37,19 +45,17 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 
 	if( !Login.user.profile ){
 		$scope.profile.profile = {
-			id: Login.user.id,
+			person_id: Login.user.id,
 			name: Login.user.name,
-			interestIn: "",
-			physicalAppearance: {
-				gender: "",
-				height: 0,
-				weight: 0,
-				country: ""
-			},
+			email: Login.user.email,
+			age: 0,
+			interested_in: "",
+			gender: Login.user.gender,
+			height: 0,
+			country: "",
 			likes: {
-				movies: [],
-				music: [],
-				tvSeries: []
+				movies_liked: [],
+				tvshows_liked: []
 			}
 		};
 	}else{
@@ -59,37 +65,34 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	$scope.save = function(){
 		$scope.profile.validate = true;
 
-		if( !$scope.profile.profile.physicalAppearance.gender ){
+		if( !$scope.profile.profile.gender ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.interestedIn ){
+		if( !$scope.profile.profile.interested_in ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.physicalAppearance.height ){
+		if( !$scope.profile.profile.height ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.physicalAppearance.weight ){
+		if( !$scope.profile.profile.age ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.physicalAppearance.country ){
+		if( !$scope.profile.profile.country ){
 			$scope.profile.showError = true;
 			return;
 		}
 
 		$scope.profile.disabled = true;		
 		Data.saveUser( Login.user.id , $scope.profile.profile ).success(function( response ){
-			if( response.success ){
-				Login.user.profile = response.user;
-				window.location = '#/home';
-			}
+			Login.user.profile = response.user;
+			window.location = '#/home';
 		});
 	};	
 
-	window._X = $scope;
 	$scope.likeInterest = function( type , id ){
 		var interest = $scope.profile.likes[type][id];
 		Data.interest( Login.user.id , type , interest , false ).success(function( response ){
