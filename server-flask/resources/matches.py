@@ -26,15 +26,40 @@ class Matching(Resource):
         # MATCH (a:Person{name:"Erick"}), (m:Person) WHERE NOT (a)-[:LIKES]->(m) AND m.name <> "Erick" RETURN DISTINCT m
         # MATCH (me {name:'Taylor'})-[r:LIKES]->(other)-[r2:LIKES]->(me) RETURN other.name
 
-    def get(self, id):
-        match = cypher.execute("""MATCH (x_id :Person {person_id:{x_id}})
-                            -[:LIKES]->(y) return y.name AS name""", x_id = id)
+    def get(self, id, cypher_type = None):
+        if (cypher_type == 'FIND_LIKES'):
+            query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
+                    return y.name AS name"""
+        elif (cypher_type == 'FIND_DISLIKES'):
+            query = """MATCH (x_id :Person {person_id:{x_id}})-[:DISLIKES]->(y)
+                    return y.name AS name"""
+        elif (cypher_type == 'FIND_SUGGESTIONS'):
+            query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
+                    WHERE NOT (x)-[:LIKES]-(y)
+                    RETURN collect(y) AS matches, collect(movie) AS movies,
+                    count(movie) AS rank
+                    ORDER BY count(movie) DESC"""
+
+        query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
+                WHERE NOT (x)-[:LIKES]-(y)
+                RETURN y, movie,
+                count(movie)
+                ORDER BY count(movie) DESC"""
+
+        match = cypher.execute(query, x_id = id)
         if not match:
-            abort(404, message="The requested user doesn't exist")
+            return ({"error": "No suggestions"})
 
         results = []
-        for record in match:
-            results.append({"name": record.name})
+        # print match["name"]
+        # for record in match:
+            # x =  record
+            # results.append({"name": record.name})
+        # print x[0]
+        x = match[1]
+        yo = x.movie
+        print match[0].y["name"]
+        print yo["genre"]
         return results
     # def put(self, id):
         #
