@@ -1,13 +1,21 @@
 #!../Scripts/python
 # -*- coding: utf-8 -*-
 
+#Code to find modules in the parent path
+import os,sys,inspect
+#print(sys.path)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+
+
 from flask import Flask, jsonify, abort, make_response, request
 from flask.ext.restful import Api, Resource, reqparse, fields, marshal
 
 from resources import person, movie, tvshow, likes
 
 
-import data_types
+from database import data_types
     
 app = Flask(__name__, static_url_path='')
 api = Api(app)
