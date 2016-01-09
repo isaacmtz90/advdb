@@ -19,17 +19,12 @@ Services.service('Login',function(){
 	};
 
 	function getUserInfo(){
-		FB.api('/me', function(response) {
+		FB.api('/me',{ locale: 'en_US', fields: 'id, name, email, picture, gender' }, function(response) {
 			result.user = response;
-			FB.api("/" + result.user.id + "/picture",
-			    function (response) {
-			    	if (response && !response.error) {
-			    		result.user.profilePic = response.data.url;
-			    		for( var i = 0 ; i < result.scopes.length ; i++ )
-			    			result.scopes[i].$digest();
-			    	} 
-			    }
-			);
+    		result.user.profilePic = response.picture.data.url;
+    		for( var i = 0 ; i < result.scopes.length ; i++ )
+    			result.scopes[i].$digest();
+			    	
 			result.ready = true;
 			if( result.success )
 				result.success();
@@ -94,7 +89,7 @@ Services.service('Data',function($http){
 				return this;
 			},
 			error: function( callback ){
-				this.callback = callback;
+				this.callbackError = callback;
 				return this;
 			},
 			_fakeResponse: function( data ){
@@ -104,13 +99,15 @@ Services.service('Data',function($http){
 				},1000);
 			},
 			get: function(){
+				var _self = this;
 				$http.get(this.url).then(function( response ){
-					console.log( response );
-				},function(){
-
+					_self.callback( response );
+				},function(w,t,f){
+					_self.callbackError(w,t,f);
 				})
 			},
 			post: function( data ){
+				var _self = this;
 				$http.post(this.url,data).then(function(){
 
 				},function(){
@@ -118,7 +115,12 @@ Services.service('Data',function($http){
 				})
 			},
 			put: function( data ){
-
+				var _self = this;
+				$http.put( this.url , data ).then(function(){
+					_self.callback( response );
+				},function(w,t,f){
+					_self.callbackError(w,t,f);
+				})
 			}
 		};
 	};
@@ -126,13 +128,11 @@ Services.service('Data',function($http){
 	var _fakeUSer = {
 		"id": "10153733372723548",
 		"name": "Carlos Sanchez",
-		"interestedIn": "female",
-		"physicalAppearance": {
-			"gender": "male",
-			"height": 172,
-			"weight": 80,
-			"country": "Honduras"
-		},
+		"interested_in": "female",
+		"gender": "male",
+		"height": 172,
+		"weight": 80,
+		"country": "Honduras",
 		"likes": {
 			"movies": ["Dawn of the Dead","Star Wars"],
 			"tvSeries": ["The Simpsons","Vikings"]
@@ -150,7 +150,7 @@ Services.service('Data',function($http){
 			var endpoint = new_Endpoint();
 			endpoint._fakeResponse({
 				"genders": ["male","female","other"], 
-				"interestedIn": ["male","female","other","all"], 
+				"interested_in": ["male","female","other","all"], 
 				"movies": ["Titanic","Star Wars","Dawn of the Dead","Wall-E","Toy Story","Tropa de Elite"],
 				"tvSeries": ["Lost","The Walking Dead","The Simpsons","Futurama","Pokemon","Family Guy","Vikings"],
 				"countries": ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
@@ -159,11 +159,8 @@ Services.service('Data',function($http){
 		},
 		saveUser: function( id , profile ){
 			console.log('UserID',id, profile);
-			var endpoint = new_Endpoint();
-			endpoint._fakeResponse({
-				success: true,
-				user: _fakeUSer
-			});
+			var endpoint = new_Endpoint('/user/');
+			endpoint.put( profile );
 			return endpoint;
 		},
 		getMatches: function( id , filters ){

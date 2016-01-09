@@ -25,6 +25,8 @@ Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($sc
 			}else{
 				window.location = '#/profile';
 			}
+		}).error(function(){
+			window.location = '#/profile';
 		});
 	}
 	$scope.matchNow = function(){
@@ -43,18 +45,15 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 
 	if( !Login.user.profile ){
 		$scope.profile.profile = {
-			id: Login.user.id,
+			person_id: Login.user.id,
 			name: Login.user.name,
-			interestIn: "",
-			physicalAppearance: {
-				gender: "",
-				height: 0,
-				weight: 0,
-				country: ""
-			},
+			age: 0,
+			interested_in: "",
+			gender: Login.user.gender,
+			height: 0,
+			country: "",
 			likes: {
 				movies: [],
-				music: [],
 				tvSeries: []
 			}
 		};
@@ -65,23 +64,23 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	$scope.save = function(){
 		$scope.profile.validate = true;
 
-		if( !$scope.profile.profile.physicalAppearance.gender ){
+		if( !$scope.profile.profile.gender ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.interestedIn ){
+		if( !$scope.profile.profile.interested_in ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.physicalAppearance.height ){
+		if( !$scope.profile.profile.height ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.physicalAppearance.weight ){
+		if( !$scope.profile.profile.age ){
 			$scope.profile.showError = true;
 			return;
 		}
-		if( !$scope.profile.profile.physicalAppearance.country ){
+		if( !$scope.profile.profile.country ){
 			$scope.profile.showError = true;
 			return;
 		}
@@ -95,7 +94,6 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		});
 	};	
 
-	window._X = $scope;
 	$scope.likeInterest = function( type , id ){
 		var interest = $scope.profile.likes[type][id];
 		Data.interest( Login.user.id , type , interest , false ).success(function( response ){
