@@ -5,18 +5,18 @@ from py2neo import Node, Relationship
 
 graph = graphene.get_database()
 
-class Movies(Resource):
+class TV_Shows(Resource):
 
-    def __init__(self):
-      super(Movies, self).__init__()
+    def __init__(self):        
+        super(TV_Shows, self).__init__()
         
-    @marshal_with(data_types.movie_list)
+    @marshal_with(data_types.tvshow_list)
     def get(self):
     
-        movies = graph.find('Movie', property_key=None,
+        tvshows = graph.find('TV_Show', property_key=None,
                                property_value=None, limit= 200)
-        movies_object = []
-        for movie in movies:
-            movies_object.append(movie.properties)
-        return {'movies' : movies_object}
+        tvshows_object = []
+        for tvshow in tvshows:
+            tvshows_object.append(tvshow.properties)
+        return {'tv_shows' : tvshows_object}
 

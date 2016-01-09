@@ -26,7 +26,7 @@ movie_list = {
 }
 
 tvshow_list = {
-    fields.List(fields.Nested(tvshow_fields))    
+    'tv_shows' : fields.List(fields.Nested(tvshow_fields))    
 }
 
 
