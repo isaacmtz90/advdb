@@ -55,5 +55,10 @@ api.add_resource(likes.Connect, '/add_like/<string:id>', endpoint='likes')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 print 'resource url created'
 
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

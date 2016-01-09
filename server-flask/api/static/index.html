@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="advdb">
+  <head>
+    <meta charset="utf-8">
+    <title>MatchFB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style/css/app.css">
+        <link rel="stylesheet" href="style/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Libs-->
+        <script src="lib/jquery/jquery.min.js"></script>
+        <script src="lib/materialize/materialize.min.js"></script>
+        <script src="lib/angular/angular.min.js"></script>
+        <script src="lib/angular/angular-route.min.js"></script>
+        <!--Services-->
+        <script src="js/services/services.js"></script>
+        <!--Config-->
+        <script src="js/config/app.js"></script>
+        <!--Controllers-->
+        <script src="js/controllers/controllers.js"></script>
+        <!--Filters-->
+        <script src="js/filters/filters.js"></script>
+        <!--Directives-->
+        <script src="js/directives/directives.js"></script>
+    </head>
+    <body>
+        <match-header></match-header>
+        <div ng-view class="main-wrapper"></div>
+        <match-footer></match-footer>
+    </body>
+</html>

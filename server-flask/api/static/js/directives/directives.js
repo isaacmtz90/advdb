@@ -6,7 +6,7 @@ var Directives = angular.module('advdb.directives', []);
 Directives.directive("advdb", [function () {
     return {
         restrict: 'E',
-        templateUrl: 'public/partials/directive.html',
+        templateUrl: 'partials/directive.html',
         link: function (scope, element, attributes) {
 
         },
@@ -19,7 +19,7 @@ Directives.directive("advdb", [function () {
 Directives.directive("matchHeader", [function () {
     return {
         restrict: 'E',
-        templateUrl: 'public/partials/header.html',
+        templateUrl: 'partials/header.html',
         scope: {},
         link: function (scope, element, attributes) {
             scope.noLogin = true;
@@ -44,7 +44,7 @@ Directives.directive("matchHeader", [function () {
 Directives.directive("matchFooter", [function () {
     return {
         restrict: 'E',
-        templateUrl: 'public/partials/footer.html',
+        templateUrl: 'partials/footer.html',
         scope: {},
         link: function (scope, element, attributes) {
     
