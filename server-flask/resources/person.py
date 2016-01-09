@@ -17,7 +17,7 @@ class Person(Resource):
                                    required=True)
         self.reqparse.add_argument('gender', type=str, location='json')
         self.reqparse.add_argument('age', type=int, location='json')
-        self.reqparse.add_argument('interested_in', type=list,
+        self.reqparse.add_argument('interested_in', type=str,
                                    location='json')
         self.reqparse.add_argument('height', type=int, location='json',
                                    default=160)
