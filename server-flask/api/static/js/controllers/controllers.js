@@ -20,8 +20,8 @@ Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$h
 Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
 	if( !Login.user.profile ){
 		Data.sendUser(Login.user).success(function( response ){
-			if( response.user.name ){
-				Login.user.profile = response.user;
+			if( response.data.name ){
+				Login.user.profile = response.data;
 			}else{
 				window.location = '#/profile';
 			}
@@ -47,14 +47,15 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		$scope.profile.profile = {
 			person_id: Login.user.id,
 			name: Login.user.name,
+			email: Login.user.email,
 			age: 0,
 			interested_in: "",
 			gender: Login.user.gender,
 			height: 0,
 			country: "",
 			likes: {
-				movies: [],
-				tvSeries: []
+				movies_liked: [],
+				tvshows_liked: []
 			}
 		};
 	}else{
@@ -87,10 +88,8 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 
 		$scope.profile.disabled = true;		
 		Data.saveUser( Login.user.id , $scope.profile.profile ).success(function( response ){
-			if( response.success ){
-				Login.user.profile = response.user;
-				window.location = '#/home';
-			}
+			Login.user.profile = response.user;
+			window.location = '#/home';
 		});
 	};	
 

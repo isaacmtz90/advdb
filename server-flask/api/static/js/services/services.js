@@ -35,7 +35,6 @@ Services.service('Login',function(){
 		if (response.status === 'connected') {
 			getUserInfo();
 		} else if (response.status === 'not_authorized') {
-			alert('not authorized');
 			if( result.fail )
 				result.fail();
 		} else {
@@ -116,7 +115,7 @@ Services.service('Data',function($http){
 			},
 			put: function( data ){
 				var _self = this;
-				$http.put( this.url , data ).then(function(){
+				$http.put( this.url , data ).then(function( response ){
 					_self.callback( response );
 				},function(w,t,f){
 					_self.callbackError(w,t,f);
@@ -134,8 +133,8 @@ Services.service('Data',function($http){
 		"weight": 80,
 		"country": "Honduras",
 		"likes": {
-			"movies": ["Dawn of the Dead","Star Wars"],
-			"tvSeries": ["The Simpsons","Vikings"]
+			"movies_liked": ["Dawn of the Dead","Star Wars"],
+			"tvshows_liked": ["The Simpsons","Vikings"]
 		}
 	};
 
@@ -151,15 +150,15 @@ Services.service('Data',function($http){
 			endpoint._fakeResponse({
 				"genders": ["male","female","other"], 
 				"interested_in": ["male","female","other","all"], 
-				"movies": ["Titanic","Star Wars","Dawn of the Dead","Wall-E","Toy Story","Tropa de Elite"],
-				"tvSeries": ["Lost","The Walking Dead","The Simpsons","Futurama","Pokemon","Family Guy","Vikings"],
+				"movies_liked": ["Titanic","Star Wars","Dawn of the Dead","Wall-E","Toy Story","Tropa de Elite"],
+				"tvshows_liked": ["Lost","The Walking Dead","The Simpsons","Futurama","Pokemon","Family Guy","Vikings"],
 				"countries": ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
 			});
 			return endpoint;
 		},
 		saveUser: function( id , profile ){
 			console.log('UserID',id, profile);
-			var endpoint = new_Endpoint('/user/');
+			var endpoint = new_Endpoint('/user/'+id);
 			endpoint.put( profile );
 			return endpoint;
 		},

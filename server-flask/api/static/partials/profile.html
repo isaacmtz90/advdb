@@ -85,7 +85,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in profile.likes.movies|interestsort:'movies':profile.profile track by $index" >
+							ng-repeat="opt in profile.likes.movies_liked|interestsort:'movies_liked':profile.profile track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 
@@ -94,12 +94,12 @@
 								</div>
 								<div class="card-content">
 									<p>{{opt}}</p>
-									<a ng-if="profile.profile.likes.movies.indexOf(opt)==-1" 
-									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies',$index);">
+									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)==-1" 
+									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('movies_liked',$index);">
 										<i class="material-icons">add</i>
 									</a>
-									<a ng-if="profile.profile.likes.movies.indexOf(opt)!=-1" asd
-									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('movies',$index);">
+									<a ng-if="profile.profile.likes.movies_liked.indexOf(opt)!=-1" asd
+									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('movies_liked',$index);">
 										<i class="material-icons">remove</i>
 									</a>
 								</div>
@@ -115,7 +115,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in profile.likes.tvSeries|interestsort:'tvSeries':profile.profile track by $index" >
+							ng-repeat="opt in profile.likes.tvshows_liked|interestsort:'tvshows_liked':profile.profile track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 
@@ -124,12 +124,12 @@
 								</div>
 								<div class="card-content">
 									<p>{{opt}}</p>
-									<a ng-if="profile.profile.likes.tvSeries.indexOf(opt)==-1" 
-									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('tvSeries',$index);">
+									<a ng-if="profile.profile.likes.tvshows_liked.indexOf(opt)==-1" 
+									class="right btn-floating btn-large waves-effect waves-light red lighten-3" ng-click="likeInterest('tvshows_liked',$index);">
 										<i class="material-icons">add</i>
 									</a>
-									<a ng-if="profile.profile.likes.tvSeries.indexOf(opt)!=-1" asd
-									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('tvSeries',$index);">
+									<a ng-if="profile.profile.likes.tvshows_liked.indexOf(opt)!=-1" asd
+									class="right btn-floating btn-large waves-effect waves-light teal lighten-2" ng-click="dislikeInterest('tvshows_liked',$index);">
 										<i class="material-icons">remove</i>
 									</a>
 								</div>
