@@ -37,7 +37,7 @@ user_fields = {
     'age': fields.Integer,
     'gender': fields.String,
     'interested_in': fields.String,
-    'height': fields.String,
+    'height': fields.Integer,
     'likes': fields.Nested(likes_fields)
     }
     
