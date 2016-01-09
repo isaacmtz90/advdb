@@ -68,6 +68,7 @@ Filters.filter('lsort',function(){
 
 Filters.filter('interestsort',function(){
 	return function(objArray, type , profile ){
+		return objArray||[];
 		if( objArray ){
 			if( !profile.likes[type] )
 				return objArray;

@@ -116,18 +116,20 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	};
 
 	Data.getMovies().success(function( response ){
-		console.log( response.data.movies );
 		$scope.profile.likes = {
 			"genders": ["male","female","other"], 
 			"interested_in": ["male","female","other","all"], 
 			"movies_liked": response.data.movies,
-			"tvshows_liked": ["Lost","The Walking Dead","The Simpsons","Futurama","Pokemon","Family Guy","Vikings"],
+			"tvshows_liked": null,
 			"countries": ["Honduras","United States","Guatemala","Nicaragua","El Salvador"]
 		};
+		Data.getTVShows().success(function( response ){
+			$scope.profile.likes.tvshows_liked = response.data.tv_shows;
 
-		setTimeout(function(){
-			$('select').material_select();
-			$('ul.tabs').tabs();
+			setTimeout(function(){
+				$('select').material_select();
+				$('ul.tabs').tabs();
+			});
 		});
 	});
 }]);

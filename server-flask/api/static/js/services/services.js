@@ -161,6 +161,11 @@ Services.service('Data',function($http){
 			endpoint.get();
 			return endpoint;
 		},
+		getTVShows: function(){
+			var endpoint = new_Endpoint('/tv_shows');
+			endpoint.get();
+			return endpoint;
+		},
 		saveUser: function( id , profile ){
 			console.log('UserID',id, profile);
 			var endpoint = new_Endpoint('/user/'+id);
