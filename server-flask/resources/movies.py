@@ -26,5 +26,8 @@ class Movies(Resource):
     
         movies = graph.find('Movie', property_key=None,
                                property_value=None, limit= 200)
-        return jsonify(movies)
+        movies_object = []
+        for movie in movies:
+            movies_object.append(movie.properties)
+        return {'movies' : movies_object}
 

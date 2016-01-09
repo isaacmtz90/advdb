@@ -22,7 +22,7 @@ likes_fields = \
      'tvshows_liked': fields.List(fields.Nested(tvshow_fields))}
 
 movie_list = {
-    fields.List(fields.Nested(movie_fields))    
+    'movies' : fields.List(fields.Nested(movie_fields))    
 }
 
 tvshow_list = {
