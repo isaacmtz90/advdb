@@ -157,7 +157,7 @@ class Connect(Resource):
                 RETURN CASE WHEN count(x) > 0 THEN true ELSE false END AS result"""
                 check_pairing = cypher.execute(query, X=id, Y=args['entity_id'])
                 res = check_pairing[0].result
-                if res == 'true':
+                if str(res) == 'true':
                     return  ({'success': 'connection created', 'match':True}, 200)
                 else:
                     return  ({'success': 'connection created'}, 200)
