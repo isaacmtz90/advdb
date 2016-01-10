@@ -6,7 +6,7 @@
 					style="background-image: url(http://graph.facebook.com/{{suggestions.newMatch.person_id}}/picture?width=1000&height=800)"></div>
 			</div>
 			<div class="card-content">
-				<p>Likes you as well!</p>
+				<p><b>{{suggestions.newMatch.name + ' Likes you as well!'}}</b></p>
 			</div>
 		</div>
 	</div>
@@ -25,7 +25,7 @@
 							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.prospect.person_id}}/picture?width=1000&height=800)"></div>
 						</div>
 						<div class="card-content">
-							<p>Likes.</p>
+							<p><b>{{suggestions.prospect.name}}</b></p>
 						</div>
 						<div class="card-action">
 							<button class="btn waves-effect waves-light btn-large left" 
@@ -60,7 +60,7 @@
 							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{item.person_id}}/picture?width=1000&height=800)"></div>
 						</div>
 						<div class="card-content">
-							<p>Likes.</p>
+							<p><b>{{item.name}}</b></p>
 						</div>
 						<div class="card-action">
 							<button class="btn waves-effect waves-light btn-large right indigo" 

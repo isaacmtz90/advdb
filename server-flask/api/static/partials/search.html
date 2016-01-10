@@ -40,7 +40,13 @@
 									</div>
 								</div>
 								<div class="card-content">
-									<p>{{opt.title}}</p>
+									<p ng-if="opt.year" ><b>{{opt.title + ' (' + opt.year + ')'}}</b></p>
+									<p ng-if="!opt.year" ><b>{{opt.title}}</b></p>
+									<p>
+										<span ng-repeat="genre in opt.genre">
+											{{genre + ($last?'':',') }}
+										</span>
+									</p>
 								    <p class="right">
 								      	<input ng-click="checkInterest('movies_liked',$index,$event);" type="checkbox" id="movie{{$index}}" />
 								      	<label for="movie{{$index}}">Likes</label>
@@ -66,7 +72,14 @@
 									</div>
 								</div>
 								<div class="card-content">
-									<p>{{opt.title}}</p>
+									<p ng-if="opt.year" ><b>{{opt.title + ' (' + opt.year + ')'}}</b></p>
+									<p ng-if="!opt.year" ><b>{{opt.title}}</b></p>
+									<p>
+										<span ng-repeat="genre in opt.genre">
+											{{genre + ($last?'':',') }}
+										</span>
+									</p>
+									<p ng-if="opt.seasons">Seasons: {{opt.seasons}}</p>
 									<p class="right">
 								      	<input ng-click="checkInterest('tvshows_liked',$index,$event);" type="checkbox" id="tv{{$index}}" />
 								      	<label for="tv{{$index}}">Likes</label>
