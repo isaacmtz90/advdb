@@ -252,17 +252,17 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 	$scope.like = function(){
 		$scope.suggestions.disabled = true;
 		Data.like( Login.user.id , $scope.suggestions.prospect.person_id , false ).success(function( response ){
-			if( response.match ){
+			if( response.data.match ){
 				$scope.suggestions.newMatch = $scope.suggestions.prospect;
 				$scope.suggestions.matches.push($scope.suggestions.newMatch);
 				setTimeout(function(){
 					$scope.suggestions.newMatch = null;
+					$scope.$digest();
 				},5000);
 			}
 
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 			$scope.suggestions.disabled = false;
-			$scope.$digest();
 			if( !$scope.suggestions.prospect ){
 				$scope.getMore();
 			}
