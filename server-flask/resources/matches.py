@@ -160,10 +160,7 @@ class Connect(Resource):
                 ELSE false END AS result"""
                 check_pairing = cypher.execute(query, X=id, Y=args['entity_id'])
                 res = check_pairing[0].result
-                if str(res) == 'true':
-                    return ({'success': 'connection created', 'match':res}, 200)
-                else:
-                    return  ({'success': 'connection created', 'match':res}, 200)
+                return ({'success': 'connection created', 'match':res}, 200)
             return  ({'error': 'one or more nodes doesnt exist'}, 400)
     def delete(self, id):
         pass
