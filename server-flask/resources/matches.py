@@ -85,6 +85,7 @@ class Matching(Resource):
     def put(self, id):
         user = graph.find_one('Person', property_key='person_id',
                               property_value=id)
+        print "Hey"
         test = args['checked']
         print test
 
