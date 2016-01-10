@@ -83,6 +83,12 @@ Services.service('Data',function($http){
 			post_data: post_data,
 			callback: function(){},
 			callbackError: function(){},
+			transform: function( data ){
+				return data;
+			},
+			transformBefore: function( data ){
+				return data;
+			},
 			success: function( callback ){
 				this.callback = callback;
 				return this;
@@ -94,13 +100,13 @@ Services.service('Data',function($http){
 			_fakeResponse: function( data ){
 				var _self = this;
 				setTimeout(function(){
-					_self.callback( data );
+					_self.callback( _self.transform(data)  );
 				},1000);
 			},
 			get: function(){
 				var _self = this;
 				$http.get(this.url).then(function( response ){
-					_self.callback( response );
+					_self.callback( _self.transform(response) );
 				},function(w,t,f){
 					_self.callbackError(w,t,f);
 				})
@@ -115,8 +121,8 @@ Services.service('Data',function($http){
 			},
 			put: function( data ){
 				var _self = this;
-				$http.put( this.url , data ).then(function( response ){
-					_self.callback( response );
+				$http.put( this.url , _self.transformBefore( data ) ).then(function( response ){
+					_self.callback( _self.transform(response) );
 				},function(w,t,f){
 					_self.callbackError(w,t,f);
 				})
@@ -142,6 +148,10 @@ Services.service('Data',function($http){
 		//first endpoint to get the user data
 		sendUser: function( user ){
 			var endpoint = new_Endpoint('/user/'+user.id);
+			endpoint.transform = function( response ){
+				response.data.likes = response.data.likes[0];
+				return response;
+			};
 			endpoint.get();
 			return endpoint;
 		},
@@ -175,27 +185,36 @@ Services.service('Data',function($http){
 		getMatches: function( id , filters ){
 			console.log('UserID',id, filters);
 			var endpoint = new_Endpoint();
-			endpoint._fakeResponse({
-				"suggestions": [{
-					"id":'100000304973925'
-				},{
-					"id":'100000170168144'
-				},{
-					"id":'502184878'
-				},{
-					"id":'100001524085465'
-				}],
-				"matches": [{
-					"id":'574890965'
-				}]
-			});
+			if( Math.random() < 0.2 ){
+				endpoint._fakeResponse({
+					"suggestions": [],
+					"matches": [{
+						"id":'574890965'
+					}]
+				});
+			}else{	
+				endpoint._fakeResponse({
+					"suggestions": [{
+						"id":'100000304973925'
+					},{
+						"id":'100000170168144'
+					},{
+						"id":'502184878'
+					},{
+						"id":'100001524085465'
+					}],
+					"matches": [{
+						"id":'574890965'
+					}]
+				});
+			}
 			return endpoint;
 		},
-		like: function( userId , otehrId , dislike ){
+		like: function( userId , otherId , dislike ){
 			var endpoint = new_Endpoint();
 			endpoint._fakeResponse({
 				success: true,
-				match: true
+				match: Math.random()<0.5
 			});
 			return endpoint;
 		},

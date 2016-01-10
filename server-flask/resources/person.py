@@ -32,13 +32,8 @@ class Person(Resource):
                               property_value=id)
         if not user:
             return ({"error": "user does not exist"})
-        watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id)
-        subgraph_person = watched_shows.to_subgraph()
-        nodelist = []
-        u = user.properties
-        for node in subgraph_person.nodes:
-            nodelist.append(node.properties['tvshow_id'])
 
+        u = user.properties
         u['likes'] = []
         u['likes'].append({'movies_liked' : self.get_liked_movies(id), 'tvshows_liked': self.get_liked_tvshows(id)})
 
@@ -58,8 +53,6 @@ class Person(Resource):
             user.properties['height']=args['height']
             user.properties['likes'] = user.properties['likes']
             user.push()
-
-            print (watched_shows[0])
             return ({"Put": user.properties})
         else:
             newPerson = Node(

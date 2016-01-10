@@ -18,17 +18,16 @@ Controllers.controller('loginCtrl', ['$scope','$http','Login',function($scope,$h
 }]);
 
 Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
-	if( !Login.user.profile ){
-		Data.sendUser(Login.user).success(function( response ){
-			if( response.data.name ){
-				Login.user.profile = response.data;
-			}else{
-				window.location = '#/profile';
-			}
-		}).error(function(){
+	Data.sendUser(Login.user).success(function( response ){
+		if( response.data.name ){
+			Login.user.profile = response.data;
+		}else{
 			window.location = '#/profile';
-		});
-	}
+		}
+	}).error(function(){
+		window.location = '#/profile';
+	});
+	
 	$scope.matchNow = function(){
 		window.location = '#/matches';
 	};
@@ -81,14 +80,9 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 			$scope.profile.showError = true;
 			return;
 		}
-		/*if( !$scope.profile.profile.country ){
-			$scope.profile.showError = true;
-			return;
-		}*/
 
 		$scope.profile.disabled = true;		
 		Data.saveUser( Login.user.id , $scope.profile.profile ).success(function( response ){
-			Login.user.profile = response.user;
 			window.location = '#/home';
 		});
 	};	
@@ -118,7 +112,7 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 
 		target.addClass(disabledClass);
 
-		Data.interest( Login.user.id , type , interestId, false ).success(function( response ){
+		Data.interest( Login.user.id , type , interestId, dislike ).success(function( response ){
 			target.removeClass(disabledClass);
 			callback( response ,interestId);
 		});
@@ -135,7 +129,7 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	};
 
 	$scope.dislikeInterest = function( type , id , event ){
-		$scope._likeInteres( type , id , event , false , function(response,interestId){ 
+		$scope._likeInteres( type , id , event , true , function(response,interestId){ 
 			if( response.data.success ){
 				$scope.profile.profile.likes[type] = $scope.profile.profile.likes[type].filter(function(a){
 					return a != interestId;
@@ -172,14 +166,37 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 		suggestions: null
 	};
 
+	window._X = $scope;
+
+	$scope.getMore = function(){
+		Data.getMatches( Login.user.id , {} ).success(function( response ){
+			$scope.suggestions.suggestions = response.suggestions;
+			if( !response.suggestions.length )
+				$scope.suggestions.noMoreMatches = true;
+			
+			$scope.suggestions.matches = response.matches;
+			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
+			$scope.$digest();
+		});
+	};
+
 	$scope.like = function(){
 		$scope.suggestions.disabled = true;
-		Data.like( Login.user.id , $scope.suggestions.prospect.id , false ).success(function(){
+		Data.like( Login.user.id , $scope.suggestions.prospect.id , false ).success(function( response ){
+			if( response.match ){
+				$scope.suggestions.newMatch = $scope.suggestions.prospect;
+				$scope.suggestions.matches.push($scope.suggestions.newMatch);
+				setTimeout(function(){
+					$scope.suggestions.newMatch = null;
+					$scope.$digest();
+				},5000);
+			}
+
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 			$scope.suggestions.disabled = false;
 			$scope.$digest();
 			if( !$scope.suggestions.prospect ){
-				//get more suggestions
+				$scope.getMore();
 			}
 		});
 	};
@@ -194,7 +211,7 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 			$scope.$digest();
 			if( !$scope.suggestions.prospect ){
-				//get more suggestions
+				$scope.getMore();
 			}
 		});
 	};
@@ -203,10 +220,5 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 		window.open( 'http://www.facebook.com/' + element.item.id );
 	};
 
-	Data.getMatches( Login.user.id , {} ).success(function( response ){
-		$scope.suggestions.suggestions = response.suggestions;
-		$scope.suggestions.matches = response.matches;
-		$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
-		$scope.$digest();
-	});
+	$scope.getMore();
 }]);
