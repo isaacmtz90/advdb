@@ -183,7 +183,7 @@ class Disconnect(Resource):
                         property_value=args['entity_id'])
 
             if (person_end):
-                cypher.execute("MATCH (x:Person{person_id: {X}}),(y:Person {person_id: {Y}}) MATCH (x)-[r1]-(y) DELETE r1", X=id, Y= args['entity_id'])
+                cypher.execute("MATCH (x:Person{person_id: {X}}),(y:Person {person_id: {Y}}) MATCH (x)-[r1]->(y) DELETE r1", X=id, Y= args['entity_id'])
                 person_disliked_user = Relationship(person_origin, "DISLIKES", person_end)
                 graph.create_unique(person_disliked_user)
                 return  ({'success': 'connection removed'}, 200)
