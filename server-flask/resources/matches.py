@@ -14,6 +14,8 @@ class Matching(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('entity_id', type=str, required=True,
                                    location='json')
+        self.reqparse.add_argument('checked', type=str, required=True,
+                                   location='json')
         super(Matching, self).__init__()
 
     def get(self, id, cypher_type):
@@ -81,7 +83,20 @@ class Matching(Resource):
         #     match = cypher.execute(query, x_id = id)
 
     def put(self, id):
-        pass
+        user = graph.find_one('Person', property_key='person_id',
+                              property_value=id)
+        test = args['checked'])
+        print test
+
+        elif (cypher_type == 'USER_SUGGESTIONS'):
+            u = {}
+            u['suggestions'] = []
+            u['matches'] = []
+            u['suggestions'].append(self.get_suggestions(id))
+            u['matches'].append(self.get_matches(id))
+            if u is None:
+                return ({"error": "No suggestions"})
+            return u
 
     def delete(self, id):
         pass
