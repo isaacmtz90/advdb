@@ -88,8 +88,8 @@ class Matching(Resource):
 
     def get_suggestions (self, person_id):
         query = """MATCH (x:Person {person_id:{x_id}})-[:WATCHED]->(interests)
-                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]->(y)
-                AND x.interested_in = y.gender RETURN y"""
+                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]->(y) AND NOT
+                (x)-[:DISLIKES]->(y) AND x.interested_in = y.gender RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
         nodelist = []
