@@ -5,8 +5,9 @@ movie_fields = {
     'movie_id': fields.String,
     'title': fields.String,
     'year': fields.Integer,
-    'genre': fields.String,
+    'genre': fields.List(fields.String),
     'picture_url': fields.String
+
     }
 
 
@@ -15,13 +16,13 @@ tvshow_fields = {
     'title': fields.String,
     'year': fields.Integer,
     'seasons': fields.Integer,
-    'genre': fields.String,
+    'genre': fields.List(fields.String),
     'picture_url': fields.String
     }
 
 likes_fields = \
-    {'movies_liked': fields.List(fields.Nested(movie_fields)),
-     'tvshows_liked': fields.List(fields.Nested(tvshow_fields))}
+    {'movies_liked': fields.List(fields.String),
+     'tvshows_liked': fields.List(fields.String)}
 
 movie_list = {
     'movies' : fields.List(fields.Nested(movie_fields))
@@ -46,7 +47,7 @@ user_fields = {
 
 
 class Person(object):
-    def __init__(self, person_id=None, email=None,name=None, age=None, gender=None, interested_in=None, height=None, likes=None):
+    def __init__(self, person_id=None, email=None, name=None, age=None, gender=None, interested_in=None, height=None, likes=None):
         self.person_id =person_id
         self.email = email
         self.name=name

@@ -54,6 +54,7 @@ api.add_resource(movies.Movies, '/movies', endpoint='movies')
 api.add_resource(tvshow.TV_Show, '/tv_show/<string:id>', endpoint='tv_show')
 api.add_resource(tvshows.TV_Shows, '/tv_shows', endpoint='tv_shows')
 api.add_resource(likes.Connect, '/add_like/<string:id>', endpoint='likes')
+api.add_resource(likes.Disonnect, '/remove_like/<string:id>', endpoint='dislikes')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 api.add_resource(matches.Matching, '/matches/<string:id>/<string:cypher_type>', endpoint='matches')
 print 'resource url created'

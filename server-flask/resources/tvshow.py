@@ -16,7 +16,7 @@ class TV_Show(Resource):
                                    location='json')
         self.reqparse.add_argument('year', type=str, location='json',
                                    required=True)
-        self.reqparse.add_argument('genre', type=str, location='json')
+        self.reqparse.add_argument('genre', type=list, location='json')
         self.reqparse.add_argument('seasons', type=str, location='json')
         self.reqparse.add_argument('picture_url', type=str, location='json')
         super(TV_Show, self).__init__()

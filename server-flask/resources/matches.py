@@ -18,22 +18,31 @@ class Matching(Resource):
                                    location='json')
         super(Matching, self).__init__()
 
-        # MATCH (a) -[:LIKES]->(m) return a,m
-        # MATCH (a:Person {name:"Carlos"}) -[:LIKES]->(m) return m.name
-        # MATCH (Taylor:Person), (Erick:Person) WHERE Taylor.name = "Taylor" AND Erick.name = "Erick" CREATE (Taylor)-[:LIKES]->(Erick)
-        # MATCH (a:Person) WHERE NOT (a)-[:LIKES]->() RETURN a
-        # MATCH (a:Person) WHERE NOT (a)-[:LIKES]->() RETURN DISTINCT a
-        # MATCH (a:Person{name:"Erick"}), (m:Person) WHERE NOT (a)-[:LIKES]->(m) AND m.name <> "Erick" RETURN DISTINCT m
-        # MATCH (me {name:'Taylor'})-[r:LIKES]->(other)-[r2:LIKES]->(me) RETURN other.name
-
     def get(self, id, cypher_type):
-        if (cypher_type == 'USER_LIKES'):
+        if (cypher_type == 'ALL_LIKES'):
+            query = """MATCH (x)-[:LIKES]->(y) RETURN x, y"""
+            match = cypher.execute(query)
+
+        elif (cypher_type == 'FREE_USERS'):
+            query = """MATCH (x:Person) WHERE NOT (x)-[:LIKES]->(y:Person)
+                    RETURN x"""
+            match = cypher.execute(query)
+
+        elif (cypher_type == 'USER_LIKES'):
             query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
-                    return y.name AS name"""
+                    RETURN y.name AS name"""
+            match = cypher.execute(query, x_id = id)
+
+        elif (cypher_type == 'USER_SUGGESTIONS_DEFAULT'):
+            query = """MATCH (x_id :Person {person_id:{x_id}}),
+                    (y:Person) WHERE NOT (x)-[:LIKES]->(y)
+                    AND y.person_id <> {x_id} RETURN y"""
+            match = cypher.execute(query, x_id = id)
 
         elif (cypher_type == 'USER_DISLIKES'):
             query = """MATCH (x_id :Person {person_id:{x_id}})-[:DISLIKES]->(y)
-                    return y.name AS name"""
+                    RETURN y.name AS name"""
+            match = cypher.execute(query, x_id = id)
 
         elif (cypher_type == 'USER_SUGGESTIONS'):
             query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y)
@@ -41,28 +50,30 @@ class Matching(Resource):
                     RETURN collect(y) AS matches, collect(interests) AS interests,
                     count(movie) AS rank
                     ORDER BY count(movie) DESC"""
+            match = cypher.execute(query, x_id = id)
 
         elif (cypher_type == 'WATCH_SUGGESTIONS'):
             query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y),
                     (y)-[:WATCHED]-(y_interests) WHERE NOT (x)-[:LIKES]-(y)
                     RETURN collect(DISTINCT y) AS matches,
                     collect(DISTINCT y_interests) AS viewing_suggestions"""
+            match = cypher.execute(query, x_id = id)
 
         elif (cypher_type == 'TEST'):
             query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
                     WHERE NOT (x)-[:LIKES]-(y)
                     RETURN y, movie,
                     count(movie) ORDER BY count(movie) DESC"""
+            match = cypher.execute(query, x_id = id)
 
-        match = cypher.execute(query, x_id = id)
         if not match:
             return ({"error": "No suggestions"})
 
-        print "One\n"
-        print match[0]
-
-        print "Two\n"
-        print match[1]
+        # print "One\n"
+        # print match[0]
+        #
+        # print "Two\n"
+        # print match[1]
 
         results = []
         # for record in match:
