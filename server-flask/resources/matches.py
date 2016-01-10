@@ -31,18 +31,21 @@ class Matching(Resource):
         #     match = cypher.execute(query)
         #     print match
         #
-        # elif (cypher_type == 'USER_LIKES'):
-        #     query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
-        #             RETURN y.person_id"""
-        #     match = cypher.execute(query, x_id = id)
-        #     print match
-        #
-        # elif (cypher_type == 'USER_SUGGESTIONS_DEFAULT'):
-        #     query = """MATCH (x :Person {person_id:{x_id}}),
-        #             (y:Person) WHERE NOT (x)-[:LIKES]->(y)
-        #             AND y.person_id <> {x_id} RETURN y"""
-        #     match = cypher.execute(query, x_id = id)
+        elif (cypher_type == 'USER_LIKES'):
+            query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
+                    RETURN y.person_id"""
+            match = cypher.execute(query, x_id = id)
+            print match
 
+        elif (cypher_type == 'USER_SUGGESTIONS_DEFAULT'):
+            u = {}
+            u['suggestions'] = []
+            u['matches'] = []
+            u['suggestions'].append(self.get_suggestions_default(id))
+            u['matches'].append(self.get_matches(id))
+            if u is None:
+                return ({"error": "No suggestions"})
+            return u
 
         elif (cypher_type == 'USER_SUGGESTIONS'):
             u = {}
@@ -50,12 +53,17 @@ class Matching(Resource):
             u['matches'] = []
             u['suggestions'].append(self.get_suggestions(id))
             u['matches'].append(self.get_matches(id))
+            if u is None:
+                return ({"error": "No suggestions"})
             return u
-        #
-        # elif (cypher_type == 'USER_DISLIKES'):
-        #     query = """MATCH (x_id :Person {person_id:{x_id}})-[:DISLIKES]->(y)
-        #             RETURN y.name AS name"""
-        #     match = cypher.execute(query, x_id = id)
+
+        elif (cypher_type == 'USER_DISLIKES'):
+            u = {}
+            u['dislikes'] = []
+            u['dislikes'].append(self.get_dislikes(id))
+            if u is None:
+                return ({"error": "No suggestions"})
+            return u
         #
         #
         # elif (cypher_type == 'WATCH_SUGGESTIONS'):
@@ -72,13 +80,6 @@ class Matching(Resource):
         #             count(movie) ORDER BY count(movie) DESC"""
         #     match = cypher.execute(query, x_id = id)
 
-        if not match:
-            return ({"error": "No suggestions"})
-
-        results = []
-
-        return results
-
     def put(self, id):
         pass
 
@@ -87,7 +88,20 @@ class Matching(Resource):
 
     def get_suggestions (self, person_id):
         query = """MATCH (x:Person {person_id:{x_id}})-[:WATCHED]->(interests)
-                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]-(y) AND x.interested_in = y.gender
+                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]-(y)
+                AND x.interested_in = y.gender RETURN y"""
+        suggestions = cypher.execute(query, x_id = person_id)
+        subgraph_person = suggestions.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append({"person_id":node.properties['person_id'],
+                            "name":node.properties['name']})
+        return nodelist
+
+    def get_suggestions_default (self, person_id):
+        query = """MATCH (x :Person {person_id:{x_id}}),
+                (y:Person) WHERE NOT (x)-[:LIKES]->(y)
+                AND y.person_id <> {x_id} AND x.interested_in = y.gender
                 RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
@@ -98,7 +112,19 @@ class Matching(Resource):
         return nodelist
 
     def get_matches(self, person_id):
-        query = """MATCH (x:Person {person_id:{x_id}})-[r:LIKES]->(y)-[r2:LIKES]->(x) RETURN y"""
+        query = """MATCH (x:Person {person_id:{x_id}})-[r:LIKES]->(y)-[r2:LIKES]->(x)
+                RETURN y"""
+        suggestions = cypher.execute(query, x_id = person_id)
+        subgraph_person = suggestions.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append({"person_id":node.properties['person_id'],
+                            "name":node.properties['name']})
+        return nodelist
+
+    def get_dislikes(self, person_id):
+        query = """MATCH (x:Person {person_id:{x_id}})-[r:DISLIKES]->(y)-[r2:LIKES]->(x)
+                RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
         nodelist = []
@@ -151,6 +177,8 @@ class Disconnect(Resource):
 
             if (person_end):
                 cypher.execute("MATCH (x:Person{person_id: {X}}),(y:Person {person_id: {Y}}) MATCH (x)-[r1]-(y) DELETE r1", X=id, Y= args['entity_id'])
+                person_disliked_user = Relationship(person_origin, "DISLIKES", person_end)
+                graph.create_unique(person_disliked_user)
                 return  ({'success': 'connection removed'}, 200)
             return  ({'error': 'one or more nodes doesnt exist'}, 400)
 
