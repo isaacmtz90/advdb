@@ -172,7 +172,7 @@ class Disconnect(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('entity_id', type=str, required=True,
                                    location='json')
-        super(Disonnect, self).__init__()
+        super(Disconnect, self).__init__()
 
     def put(self, id):
         args = self.reqparse.parse_args()
