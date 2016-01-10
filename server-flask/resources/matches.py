@@ -12,81 +12,148 @@ class Matching(Resource):
     def __init__(self):
         #Request parser to get the params in a sexy way
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('entity_type', type=str,
-                                   required=True, location='json')
         self.reqparse.add_argument('entity_id', type=str, required=True,
                                    location='json')
         super(Matching, self).__init__()
 
     def get(self, id, cypher_type):
+        user = graph.find_one('Person', property_key='person_id',
+                              property_value=id)
+
         if (cypher_type == 'ALL_LIKES'):
             query = """MATCH (x)-[:LIKES]->(y) RETURN x, y"""
             match = cypher.execute(query)
+            print match
 
-        elif (cypher_type == 'FREE_USERS'):
-            query = """MATCH (x:Person) WHERE NOT (x)-[:LIKES]->(y:Person)
-                    RETURN x"""
-            match = cypher.execute(query)
+        # elif (cypher_type == 'FREE_USERS'):
+        #     query = """MATCH (x:Person) WHERE NOT (x)-[:LIKES]->(y:Person)
+        #             RETURN x"""
+        #     match = cypher.execute(query)
+        #     print match
+        #
+        # elif (cypher_type == 'USER_LIKES'):
+        #     query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
+        #             RETURN y.person_id"""
+        #     match = cypher.execute(query, x_id = id)
+        #     print match
+        #
+        # elif (cypher_type == 'USER_SUGGESTIONS_DEFAULT'):
+        #     query = """MATCH (x :Person {person_id:{x_id}}),
+        #             (y:Person) WHERE NOT (x)-[:LIKES]->(y)
+        #             AND y.person_id <> {x_id} RETURN y"""
+        #     match = cypher.execute(query, x_id = id)
 
-        elif (cypher_type == 'USER_LIKES'):
-            query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
-                    RETURN y.name AS name"""
-            match = cypher.execute(query, x_id = id)
-
-        elif (cypher_type == 'USER_SUGGESTIONS_DEFAULT'):
-            query = """MATCH (x_id :Person {person_id:{x_id}}),
-                    (y:Person) WHERE NOT (x)-[:LIKES]->(y)
-                    AND y.person_id <> {x_id} RETURN y"""
-            match = cypher.execute(query, x_id = id)
-
-        elif (cypher_type == 'USER_DISLIKES'):
-            query = """MATCH (x_id :Person {person_id:{x_id}})-[:DISLIKES]->(y)
-                    RETURN y.name AS name"""
-            match = cypher.execute(query, x_id = id)
 
         elif (cypher_type == 'USER_SUGGESTIONS'):
-            query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y)
-                    WHERE NOT (x)-[:LIKES]-(y) AND x.interested_in = y.gender
-                    RETURN collect(y) AS matches, collect(interests) AS interests,
-                    count(movie) AS rank
-                    ORDER BY count(movie) DESC"""
-            match = cypher.execute(query, x_id = id)
-
-        elif (cypher_type == 'WATCH_SUGGESTIONS'):
-            query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y),
-                    (y)-[:WATCHED]-(y_interests) WHERE NOT (x)-[:LIKES]-(y)
-                    RETURN collect(DISTINCT y) AS matches,
-                    collect(DISTINCT y_interests) AS viewing_suggestions"""
-            match = cypher.execute(query, x_id = id)
-
-        elif (cypher_type == 'TEST'):
-            query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
-                    WHERE NOT (x)-[:LIKES]-(y)
-                    RETURN y, movie,
-                    count(movie) ORDER BY count(movie) DESC"""
-            match = cypher.execute(query, x_id = id)
+            u = {}
+            u['suggestions'] = []
+            u['matches'] = []
+            u['suggestions'].append(self.get_suggestions(id))
+            u['matches'].append(self.get_matches(id))
+            return u
+        #
+        # elif (cypher_type == 'USER_DISLIKES'):
+        #     query = """MATCH (x_id :Person {person_id:{x_id}})-[:DISLIKES]->(y)
+        #             RETURN y.name AS name"""
+        #     match = cypher.execute(query, x_id = id)
+        #
+        #
+        # elif (cypher_type == 'WATCH_SUGGESTIONS'):
+        #     query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y),
+        #             (y)-[:WATCHED]-(y_interests) WHERE NOT (x)-[:LIKES]-(y)
+        #             RETURN collect(DISTINCT y) AS matches,
+        #             collect(DISTINCT y_interests) AS viewing_suggestions"""
+        #     match = cypher.execute(query, x_id = id)
+        #
+        # elif (cypher_type == 'TEST'):
+        #     query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
+        #             WHERE NOT (x)-[:LIKES]-(y)
+        #             RETURN y, movie,
+        #             count(movie) ORDER BY count(movie) DESC"""
+        #     match = cypher.execute(query, x_id = id)
 
         if not match:
             return ({"error": "No suggestions"})
 
-        # print "One\n"
-        # print match[0]
-        #
-        # print "Two\n"
-        # print match[1]
-
         results = []
-        # for record in match:
-        #     print record
-            # results.append({"name": record.name})
-        # print match["name"]
-        # print x[0]
-        # x = match[1]
-        # yo = x.movie
-        # print match[0].y["name"]
-        # print yo["genre"]
+
         return results
-    # def put(self, id):
-        #
+
+    def put(self, id):
+        pass
+
+    def delete(self, id):
+        pass
+
+    def get_suggestions (self, person_id):
+        query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y)
+                WHERE NOT (x)-[:LIKES]-(y) AND x.interested_in = y.gender
+                RETURN y"""
+        suggestions = cypher.execute(query, x_id = person_id)
+        subgraph_person = suggestions.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append({"person_id":node.properties['person_id'],
+                            "name":node.properties['name']})
+        return nodelist
+
+    def get_matches(self, person_id):
+        query = query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
+                RETURN y"""
+        suggestions = cypher.execute(query, x_id = person_id)
+        subgraph_person = suggestions.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append({"person_id":node.properties['person_id'],
+                            "name":node.properties['name']})
+        return nodelist
+
+class Connect(Resource):
+
+    def __init__(self):
+        #Request parser to get the params in a sexy way
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('entity_id', type=str, required=True,
+                                   location='json')
+        super(Connect, self).__init__()
+
+    def put(self, id):
+        args = self.reqparse.parse_args()
+        person_origin = graph.find_one('Person', property_key='person_id',
+                              property_value=id)
+        if(person_origin):
+            person_end = graph.find_one('Person', property_key='person_id',
+                        property_value=args['entity_id'])
+
+            if (person_end):
+                person_liked_user = Relationship(person_origin, "LIKES", person_end)
+                graph.create_unique(person_liked_user)
+                return  ({'success': 'connection created'}, 200)
+            return  ({'error': 'one or more nodes doesnt exist'}, 400)
+    def delete(self, id):
+        pass
+
+class Disonnect(Resource):
+
+    def __init__(self):
+        #Request parser to get the params in a sexy way
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('entity_id', type=str, required=True,
+                                   location='json')
+        super(Disonnect, self).__init__()
+        
+    def put(self, id):
+        args = self.reqparse.parse_args()
+        person_origin = graph.find_one('Person', property_key='person_id',
+                              property_value=id)
+        if(person_origin):
+            person_end = graph.find_one('Person', property_key='person_id',
+                        property_value=args['entity_id'])
+
+            if (person_end):
+                cypher.execute("MATCH (x:Person{person_id: {X}}),(y:Person {person_id: {Y}}) MATCH (x)-[r1]-(y) DELETE r1", X=id, Y= args['entity_id'])
+                return  ({'success': 'connection removed'}, 200)
+            return  ({'error': 'one or more nodes doesnt exist'}, 400)
+
     def delete(self, id):
         pass

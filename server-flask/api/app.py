@@ -57,8 +57,10 @@ api.add_resource(likes.Connect, '/add_like/<string:id>', endpoint='likes')
 api.add_resource(likes.Disonnect, '/remove_like/<string:id>', endpoint='dislikes')
 api.add_resource(TestAPI, '/tests/<int:id>', endpoint='test')
 api.add_resource(matches.Matching, '/matches/<string:id>/<string:cypher_type>', endpoint='matches')
-print 'resource url created'
+api.add_resource(matches.Connect, '/add_match/<string:id>', endpoint='match_user')
+api.add_resource(matches.Disconnect, '/remove_match/<string:id>', endpoint='unmatch_user')
 
+print 'resource url created'
 
 @app.route('/')
 def root():
