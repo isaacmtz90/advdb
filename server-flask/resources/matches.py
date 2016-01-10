@@ -50,16 +50,22 @@ class Matching(Resource):
         if not match:
             return ({"error": "No suggestions"})
 
+        print "One\n"
+        print match[0]
+
+        print "Two\n"
+        print match[1]
+
         results = []
-        # print match["name"]
         # for record in match:
-            # x =  record
+        #     print record
             # results.append({"name": record.name})
+        # print match["name"]
         # print x[0]
-        x = match[1]
-        yo = x.movie
-        print match[0].y["name"]
-        print yo["genre"]
+        # x = match[1]
+        # yo = x.movie
+        # print match[0].y["name"]
+        # print yo["genre"]
         return results
     # def put(self, id):
         #
