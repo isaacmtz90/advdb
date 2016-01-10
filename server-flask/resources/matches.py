@@ -98,8 +98,7 @@ class Matching(Resource):
         return nodelist
 
     def get_matches(self, person_id):
-        query = """MATCH (x:Person {person_id:{x_id}})->[r:LIKES]->(y)-
-                [r2:LIKES]->(x) RETURN y"""
+        query = """MATCH (x:Person {person_id:{x_id}})-[r:LIKES]->(y)-[r2:LIKES]->(x) RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
         nodelist = []
