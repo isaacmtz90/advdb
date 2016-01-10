@@ -31,5 +31,7 @@ pip install -r requirements.txt
 then run the app
 
 ```
-python app.y
+python app.py
 ```
+
+Live version [here](https://morning-badlands-7157.herokuapp.com)
