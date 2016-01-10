@@ -25,19 +25,18 @@ class Person(Resource):
                                    default=160)
         self.reqparse.add_argument('likes')
         super(Person, self).__init__()
-    
+
     @marshal_with(data_types.user_fields)
     def get(self, id):
         user = graph.find_one('Person', property_key='person_id',
                               property_value=id)
         if not user:
             return ({"error": "user does not exist"})
-   
+
         u = user.properties
-     
         u['likes'] = []
         u['likes'].append({'movies_liked' : self.get_liked_movies(id), 'tvshows_liked': self.get_liked_tvshows(id)})
-        
+
         return u
 
     def put(self, id):
@@ -94,16 +93,16 @@ class Person(Resource):
 
             graph.create(newPerson)
             return ({'created': newPerson.properties}, 200)
-        
-        
+
+
     def get_liked_movies (self, personid):
-        watched_moviess= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:Movie) MATCH (a)-[:WATCHED]-(m) return m", A=personid)
-        subgraph_person = watched_moviess.to_subgraph()
+        watched_movies= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:Movie) MATCH (a)-[:WATCHED]-(m) return m", A=personid)
+        subgraph_person = watched_movies.to_subgraph()
         nodelist = []
         for node in subgraph_person.nodes:
             nodelist.append(node.properties['movie_id'])
         return nodelist
-            
+
     def get_liked_tvshows(self, personid):
         watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=personid)
         subgraph_person = watched_shows.to_subgraph()
@@ -111,10 +110,8 @@ class Person(Resource):
         for node in subgraph_person.nodes:
             nodelist.append(node.properties['tvshow_id'])
         return nodelist
-    
-    
-    
+
+
+
     def delete(self, id):
         pass
-
-
