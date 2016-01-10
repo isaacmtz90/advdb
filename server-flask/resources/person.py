@@ -32,7 +32,11 @@ class Person(Resource):
         if not user:
             return ({"error": "user does not exist"})
         watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id)
-        print (watched_shows)
+        subgraph_person = watched_shows.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append(node.properties)
+        print (nodelist)
         return user.properties
 
     def put(self, id):
@@ -51,7 +55,7 @@ class Person(Resource):
             
             
             watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id, B= int(args['entity_id']))
-            print (watched_shows)
+            print (watched_shows[0])
             return ({"Put": user.properties})
         else:
             newPerson = Node(

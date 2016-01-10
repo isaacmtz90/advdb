@@ -72,9 +72,6 @@ class Disonnect(Resource):
                                   property_value=args['entity_id'])
                 if (tvshow):
                     cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show {tvshow_id: {B}}) MATCH (a)-[r1]-(m) DELETE r1", A=id, B= args['entity_id'])
-                    #person_watched_tvshow= Relationship(person_origin, "WATCHED", tvshow)
-                    #person_watched_tvshow.pull()
-                    #graph.delete(person_watched_tvshow)
                     return  ({'success': 'connection removed'}, 200)
                 return  ({'error': 'one or more nodes doesnt exist'}, 400)
 
