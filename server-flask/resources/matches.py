@@ -153,14 +153,17 @@ class Connect(Resource):
             if (person_end):
                 person_liked_user = Relationship(person_origin, "LIKES", person_end)
                 graph.create_unique(person_liked_user)
-                query = """MATCH (x:Person{person_id: {X}})-[r:LIKES]->(y:Person{person_id: {X}})-[r2:LIKES]->(x)
-                RETURN CASE WHEN count(x) > 0 THEN true ELSE false END AS result"""
+                query = """MATCH (x:Person{person_id: {X}})-[r:LIKES]->(y:Person{person_id: {Y}})-[r2:LIKES]->(x)
+                RETURN
+                CASE WHEN count(y) > 0
+                THEN true
+                ELSE false END AS result"""
                 check_pairing = cypher.execute(query, X=id, Y=args['entity_id'])
                 res = check_pairing[0].result
-                # if str(res) == 'true':
-                return  ({'success': 'connection created', 'match':res}, 200)
-                # else:
-                    # return  ({'success': 'connection created'}, 200)
+                if str(res) == 'true':
+                    return ({'success': 'connection created', 'match':res}, 200)
+                else:
+                    return  ({'success': 'connection created'}, 200)
             return  ({'error': 'one or more nodes doesnt exist'}, 400)
     def delete(self, id):
         pass
