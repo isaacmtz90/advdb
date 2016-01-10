@@ -2,8 +2,9 @@ from flask import Flask, jsonify, abort, make_response, request
 from flask.ext.restful import Resource, reqparse, fields, marshal, marshal_with
 from database import graphene, data_types
 from py2neo import Node, Relationship
-graph = graphene.get_database()
 
+graph = graphene.get_database()
+cypher = graph.cypher
 
 class Person(Resource):
 
@@ -30,6 +31,8 @@ class Person(Resource):
                               property_value=id)
         if not user:
             return ({"error": "user does not exist"})
+        watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id)
+        print (watched_shows)
         return user.properties
 
     def put(self, id):
@@ -45,6 +48,10 @@ class Person(Resource):
             user.properties['interested_in']=args['interested_in']
             user.properties['height']=args['height']
             user.push()
+            
+            
+            watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id, B= int(args['entity_id']))
+            print (watched_shows)
             return ({"Put": user.properties})
         else:
             newPerson = Node(
