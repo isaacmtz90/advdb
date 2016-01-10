@@ -32,8 +32,9 @@ class Person(Resource):
                               property_value=id)
         if not user:
             return ({"error": "user does not exist"})
-       
-        
+   
+        u = user.properties
+     
         u['likes'] = []
         u['likes'].append({'movies_liked' : self.get_liked_movies(id), 'tvshows_liked': self.get_liked_tvshows(id)})
         
