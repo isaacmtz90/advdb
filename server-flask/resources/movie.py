@@ -16,7 +16,7 @@ class Movie(Resource):
                                    location='json')
         self.reqparse.add_argument('year', type=str, location='json',
                                    required=True)
-        self.reqparse.add_argument('genre', type=str, location='json')
+        self.reqparse.add_argument('genre', type=list, location='json')
         self.reqparse.add_argument('picture_url', type=str, location='json')
       
         super(Movie, self).__init__()
