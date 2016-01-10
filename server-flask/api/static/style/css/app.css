@@ -145,3 +145,17 @@ nav a.header-logo {
     background-repeat: no-repeat;
     background-position: center center;
 }
+
+a.btn-large.button-loading {
+	pointer-events: none;
+	background-image: url(../../img/ajax-loader.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: transparent!important;
+	-webkit-transition: none!important;
+	transition: none!important;
+}
+
+.button-loading * {
+	opacity: 0;
+}
