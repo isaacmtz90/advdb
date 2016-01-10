@@ -27,18 +27,23 @@ class Matching(Resource):
         # MATCH (me {name:'Taylor'})-[r:LIKES]->(other)-[r2:LIKES]->(me) RETURN other.name
 
     def get(self, id, cypher_type = None):
-        if (cypher_type == 'FIND_LIKES'):
+        if (cypher_type == 'USER_LIKES'):
             query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
                     return y.name AS name"""
-        elif (cypher_type == 'FIND_DISLIKES'):
+        elif (cypher_type == 'USER_DISLIKES'):
             query = """MATCH (x_id :Person {person_id:{x_id}})-[:DISLIKES]->(y)
                     return y.name AS name"""
-        elif (cypher_type == 'FIND_SUGGESTIONS'):
+        elif (cypher_type == 'USER_SUGGESTIONS'):
             query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
                     WHERE NOT (x)-[:LIKES]-(y)
                     RETURN collect(y) AS matches, collect(movie) AS movies,
                     count(movie) AS rank
                     ORDER BY count(movie) DESC"""
+        elif (cypher_type == 'WATCH_SUGGESTIONS'):
+            query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y),
+                    (y)-[:WATCHED]-(y_interests) WHERE NOT (x)-[:LIKES]-(y)
+                    RETURN collect(DISTINCT y) AS matches,
+                    collect(DISTINCT y_interests) AS viewing_suggestions"""
 
         query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(movie)<-[:WATCHED]-(y)
                 WHERE NOT (x)-[:LIKES]-(y)
