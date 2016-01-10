@@ -93,29 +93,53 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		});
 	};	
 
-	$scope.likeInterest = function( type , id ){
+	window._X = $scope;
+	$scope.userLikes = function( index , array , type ){
+		if( !$scope.profile.profile.likes[type] )
+			return false;
+		var interest = array[index];
+		var id = interest.tvshow_id || interest.movie_id;
+		for( var i = 0 ; i < $scope.profile.profile.likes[type].length ; i++ ){
+			if( $scope.profile.profile.likes[type][i] == id )
+				return true;
+		}
+		return false;
+	};
+
+
+	$scope._likeInteres = function(type , id , event , dislike , callback ){
+		var target = $(event.target).parent();
 		var interest = $scope.profile.likes[type][id];
 		var interestId = interest.tvshow_id || interest.movie_id;
+		var disabledClass = 'button-loading';
+
+		if( target.hasClass(disabledClass) )
+			return;
+
+		target.addClass(disabledClass);
 
 		Data.interest( Login.user.id , type , interestId, false ).success(function( response ){
+			target.removeClass(disabledClass);
+			callback( response ,interestId);
+		});
+	};
+
+	$scope.likeInterest = function( type , id , event ){
+		$scope._likeInteres( type , id , event , false , function(response,interestId){ 
 			if( response.data.success ){
 				if( !$scope.profile.profile.likes[type] )
 					$scope.profile.profile.likes[type] = [];
-
 				$scope.profile.profile.likes[type].push(interestId);
-				$scope.$digest();
 			}
 		});
 	};
 
-	$scope.dislikeInterest = function( type , id ){
-		var interest = $scope.profile.likes[type][id];
-		Data.interest( Login.user.id , type , interest , true ).success(function( response ){
+	$scope.dislikeInterest = function( type , id , event ){
+		$scope._likeInteres( type , id , event , false , function(response,interestId){ 
 			if( response.data.success ){
 				$scope.profile.profile.likes[type] = $scope.profile.profile.likes[type].filter(function(a){
-					return a != interest;
+					return a != interestId;
 				});
-				$scope.$digest();
 			}
 		});
 	};

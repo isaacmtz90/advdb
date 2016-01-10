@@ -127,3 +127,35 @@ body {
 ul.tabs {
 	overflow: hidden;
 }
+
+nav a.header-logo {
+	height: 64px;
+    width: 140px;
+    background-image: url(../../img/logoh.png);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.main-logo {
+	height: 200px;
+    width: 100%;
+    background-image: url(../../img/logov.png);
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+a.btn-large.button-loading {
+	pointer-events: none;
+	background-image: url(../../img/ajax-loader.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: transparent!important;
+	-webkit-transition: none!important;
+	transition: none!important;
+}
+
+.button-loading * {
+	opacity: 0;
+}
