@@ -1,0 +1,82 @@
+<div class="search"> 
+	<div class="container">
+		<div class="section">
+			<div class="row">
+				<div class="col s12 m2"><b>Searching for</b></div>
+				<div class="col s12 m2 input-field">
+					<select id="gender"   
+						ng-model="search.gender" 
+						ng-class="{'has-error': !profile.profile.gender&&profile.validate}">
+						<option 
+						ng-repeat="opt in ['male','female','any']">{{opt}}</option>
+					</select>
+					<label for="gender">Gender</label>
+				</div>
+				<div class="col s12 m4"><b>Person who is interested in: </b></div>
+			</div>
+		</div>
+		<div class="section">
+			<ul class="tabs">
+				<li class="tab col s4">
+					<a href="#movies">Movies</a>
+				</li>
+				<li class="tab col s4">
+					<a href="#tvshows">TV Shows</a>
+				</li>
+			</ul>
+			<br><br>
+			<div id="movies">
+				<div class="row">
+					<div class="col s12 m12"><b>Movies</b></div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="col s3" 
+							ng-repeat="opt in search.likes.movies_liked|interestsort:'movies_liked':search.checked track by $index" >
+							<div id="mo{{$index}}" class="card">
+								<div class="card-image">
+									<div class="interest-pict" 
+										style="background-image: url({{opt.picture_url}});">
+									</div>
+								</div>
+								<div class="card-content">
+									<p>{{opt.title}}</p>
+								    <p class="right">
+								      	<input ng-click="checkInterest('movies_liked',$index,$event);" type="checkbox" id="movie{{$index}}" />
+								      	<label for="movie{{$index}}">Likes</label>
+								    </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="tvshows">
+				<div class="row">
+					<div class="col s12 m12"><b>TV Shows</b></div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="col s3" 
+							ng-repeat="opt in search.likes.tvshows_liked|interestsort:'tvshows_liked':search.checked track by $index" >
+							<div id="mo{{$index}}" class="card">
+								<div class="card-image">
+									<div class="interest-pict" 
+										style="background-image: url({{opt.picture_url}});">
+									</div>
+								</div>
+								<div class="card-content">
+									<p>{{opt.title}}</p>
+									<p class="right">
+								      	<input ng-click="checkInterest('tvshows_liked',$index,$event);" type="checkbox" id="tv{{$index}}" />
+								      	<label for="tv{{$index}}">Likes</label>
+								    </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

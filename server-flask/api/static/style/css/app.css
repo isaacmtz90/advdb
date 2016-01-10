@@ -105,7 +105,8 @@ body {
     height: 96px;
 }
 
-.profile .card .card-content {
+.profile .card .card-content ,
+.search .card .card-content {
     padding-bottom: 67px;
 }
 

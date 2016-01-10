@@ -177,37 +177,22 @@ Services.service('Data',function($http){
 			return endpoint;
 		},
 		saveUser: function( id , profile ){
-			console.log('UserID',id, profile);
 			var endpoint = new_Endpoint('/user/'+id);
 			endpoint.put( profile );
 			return endpoint;
 		},
-		getMatches: function( id , filters ){
-			console.log('UserID',id, filters);
+		getMatches: function( id  ){
 			var endpoint = new_Endpoint();
-			if( Math.random() < 0.2 ){
-				endpoint._fakeResponse({
-					"suggestions": [],
-					"matches": [{
-						"id":'574890965'
-					}]
-				});
-			}else{	
-				endpoint._fakeResponse({
-					"suggestions": [{
-						"id":'100000304973925'
-					},{
-						"id":'100000170168144'
-					},{
-						"id":'502184878'
-					},{
-						"id":'100001524085465'
-					}],
-					"matches": [{
-						"id":'574890965'
-					}]
-				});
-			}
+			endpoint._fakeResponse({
+				"matches": [{
+					"id":'574890965'
+				}]
+			});
+			return endpoint;
+		},
+		getSuggestions: function( id , filters ){
+			var endpoint = new_Endpoint('/matches/' + id + '/USER_SUGGESTIONS');
+			endpoint.get();
 			return endpoint;
 		},
 		like: function( userId , otherId , dislike ){

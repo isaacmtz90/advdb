@@ -67,17 +67,17 @@ Filters.filter('lsort',function(){
 });
 
 Filters.filter('interestsort',function(){
-	return function(objArray, type , profile ){
+	return function(objArray, type , likes ){
 		if( objArray ){
 			return objArray.sort(function(a,b){
-				if( profile.likes[type] ){
+				if( likes[type] ){
 					var aid = a.movie_id || a.tvshow_id;
 					var bid = b.movie_id || b.tvshow_id;
 
-					if( profile.likes[type].indexOf(aid)!=-1 && profile.likes[type].indexOf(bid)==-1 ){
+					if( likes[type].indexOf(aid)!=-1 && likes[type].indexOf(bid)==-1 ){
 						return -1;
 					}
-					if( profile.likes[type].indexOf(aid)==-1 && profile.likes[type].indexOf(bid)!=-1 ){
+					if( likes[type].indexOf(aid)==-1 && likes[type].indexOf(bid)!=-1 ){
 						return 1
 					}
 				}

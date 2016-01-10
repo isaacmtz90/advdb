@@ -41,6 +41,12 @@ app.config(['$routeProvider',function($routeProvider) {
 		resolve: {
 			data: resolveLogin
 		}
+	}).when('/search', {
+		templateUrl: 'partials/search.html',
+		controller: 'searchCtrl',
+		resolve: {
+			data: resolveLogin
+		}
 	}).otherwise({
 		redirectTo: '/login'
 	});

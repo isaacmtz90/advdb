@@ -31,6 +31,10 @@ Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($sc
 	$scope.matchNow = function(){
 		window.location = '#/matches';
 	};
+
+	$scope.searchNow = function(){
+		window.location = '#/search';
+	};
 }]);
 
 Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
@@ -87,7 +91,6 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 		});
 	};	
 
-	window._X = $scope;
 	$scope.userLikes = function( index , array , type ){
 		if( !$scope.profile.profile.likes[type] )
 			return false;
@@ -157,6 +160,73 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 	});
 }]);
 
+Controllers.controller('searchCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
+	$scope.search = {
+		likes: {
+			"movies_liked": [],
+			"tvshows_liked": []
+		},
+		checked: {
+			"movies_liked": [],
+			"tvshows_liked": []
+		}
+	};
+
+	window._X = $scope;
+	$scope.checkedByUser = function( index , array , type ){
+		var interest = array[index];
+		var id = interest.tvshow_id || interest.movie_id;
+		for( var i = 0 ; i < $scope.search.checked[type].length ; i++ ){
+			if( $scope.checked.likes[type][i] == id )
+				return true;
+		}
+		return false;
+	};
+
+	$scope._checkInteres = function(type , id , event , dislike , callback ){
+		var target = $(event.target).parent();
+		var interest = $scope.profile.likes[type][id];
+		var interestId = interest.tvshow_id || interest.movie_id;
+		var disabledClass = 'button-loading';
+
+		if( target.hasClass(disabledClass) )
+			return;
+
+		target.addClass(disabledClass);
+
+		Data.interest( Login.user.id , type , interestId, dislike ).success(function( response ){
+			target.removeClass(disabledClass);
+			callback( response ,interestId);
+		});
+	};
+
+	$scope.checkInterest = function( type , id , event ){
+		if( $scope.search.checked[type].indexOf(id) != -1 ){
+			$scope.search.checked[type] = $scope.search.checked[type].filter(function(a){
+				return a != id;
+			});
+		}else{
+			$scope.search.checked[type].push(id);
+		}
+	};
+
+	$scope.go = function(){
+		
+	};	
+
+	Data.getMovies().success(function( response ){
+		$scope.search.likes.movies_liked = response.data.movies;
+		Data.getTVShows().success(function( response ){
+			$scope.search.likes.tvshows_liked = response.data.tv_shows;
+
+			setTimeout(function(){
+				$('select').material_select();
+				$('ul.tabs').tabs();
+			});
+		});
+	});
+}]);
+
 Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
 	if( !Login.user.profile ){
 		window.location = '#/home';
@@ -166,17 +236,18 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 		suggestions: null
 	};
 
-	window._X = $scope;
-
 	$scope.getMore = function(){
 		Data.getMatches( Login.user.id , {} ).success(function( response ){
-			$scope.suggestions.suggestions = response.suggestions;
-			if( !response.suggestions.length )
-				$scope.suggestions.noMoreMatches = true;
-			
 			$scope.suggestions.matches = response.matches;
-			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
-			$scope.$digest();
+			Data.getSuggestions( Login.user.id , {} ).success(function( response ){
+
+				$scope.suggestions.suggestions = response.suggestions;
+				if( !response.suggestions.length )
+					$scope.suggestions.noMoreMatches = true;
+
+				$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
+				$scope.$digest();
+			});
 		});
 	};
 
