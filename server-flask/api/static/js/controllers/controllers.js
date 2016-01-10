@@ -29,6 +29,7 @@ Controllers.controller('homeCtrl', ['$scope','$http','Data','Login',function($sc
 	});
 	
 	$scope.matchNow = function(){
+		Login.filters = null;
 		window.location = '#/matches';
 	};
 
@@ -162,6 +163,7 @@ Controllers.controller('profileCtrl', ['$scope','$http','Data','Login',function(
 
 Controllers.controller('searchCtrl', ['$scope','$http','Data','Login',function($scope,$http,Data,Login) {
 	$scope.search = {
+		gender: Login.user.profile.interested_in,
 		likes: {
 			"movies_liked": [],
 			"tvshows_liked": []
@@ -211,7 +213,8 @@ Controllers.controller('searchCtrl', ['$scope','$http','Data','Login',function($
 	};
 
 	$scope.go = function(){
-		
+		Login.filters = $scope.search;
+		window.location = '#/matches';
 	};	
 
 	Data.getMovies().success(function( response ){
@@ -237,29 +240,23 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 	};
 
 	$scope.getMore = function(){
-		Data.getMatches( Login.user.id , {} ).success(function( response ){
-			$scope.suggestions.matches = response.matches;
-			Data.getSuggestions( Login.user.id , {} ).success(function( response ){
-
-				$scope.suggestions.suggestions = response.suggestions;
-				if( !response.suggestions.length )
-					$scope.suggestions.noMoreMatches = true;
-
-				$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
-				$scope.$digest();
-			});
+		Data.getSuggestions( Login.user.id , Login.filters || {} ).success(function( response ){
+			$scope.suggestions.suggestions = response.data.suggestions[0];
+			$scope.suggestions.matches = response.data.matches[0];
+			if( !$scope.suggestions.suggestions.length )
+				$scope.suggestions.noMoreMatches = true;
+			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 		});
 	};
 
 	$scope.like = function(){
 		$scope.suggestions.disabled = true;
-		Data.like( Login.user.id , $scope.suggestions.prospect.id , false ).success(function( response ){
+		Data.like( Login.user.id , $scope.suggestions.prospect.person_id , false ).success(function( response ){
 			if( response.match ){
 				$scope.suggestions.newMatch = $scope.suggestions.prospect;
 				$scope.suggestions.matches.push($scope.suggestions.newMatch);
 				setTimeout(function(){
 					$scope.suggestions.newMatch = null;
-					$scope.$digest();
 				},5000);
 			}
 
@@ -274,13 +271,12 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 
 	$scope.dislike = function(){
 		$scope.suggestions.disabled = true;
-		Data.like( Login.user.id , $scope.suggestions.prospect.id , true ).success(function(){
+		Data.like( Login.user.id , $scope.suggestions.prospect.person_id , true ).success(function(){
 			$scope.suggestions.suggestions = $scope.suggestions.suggestions.filter(function(a){
-				return a != $scope.suggestions.prospect.id;
+				return a != $scope.suggestions.prospect.person_id;
 			});
 			$scope.suggestions.disabled = false;
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
-			$scope.$digest();
 			if( !$scope.suggestions.prospect ){
 				$scope.getMore();
 			}

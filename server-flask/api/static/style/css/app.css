@@ -188,3 +188,7 @@ a.btn-large.button-loading {
     position: absolute;
     bottom: 30px;
 }
+
+.search {
+	padding-bottom: 40px;
+}

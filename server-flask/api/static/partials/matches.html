@@ -2,7 +2,7 @@
 	<div ng-if="suggestions.newMatch" class="newmatch-screen">
 		<div class="card">
 			<div class="card-image">
-				<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.newMatch.id}}/picture?width=1000&height=800)"></div>
+				<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.newMatch.person_id}}/picture?width=1000&height=800)"></div>
 			</div>
 			<div class="card-content">
 				<p>Likes you as well!</p>
@@ -21,7 +21,7 @@
 				<div class="col s12 m8">
 					<div class="card" ng-if="suggestions.prospect">
 						<div class="card-image">
-							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.prospect.id}}/picture?width=1000&height=800)"></div>
+							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.prospect.person_id}}/picture?width=1000&height=800)"></div>
 						</div>
 						<div class="card-content">
 							<p>Likes.</p>
@@ -56,7 +56,7 @@
 				<div class="col s12 m3" ng-repeat="item in suggestions.matches track by $index">
 					<div class="card">
 						<div class="card-image">
-							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{item.id}}/picture?width=1000&height=800)"></div>
+							<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{item.person_id}}/picture?width=1000&height=800)"></div>
 						</div>
 						<div class="card-content">
 							<p>Likes.</p>

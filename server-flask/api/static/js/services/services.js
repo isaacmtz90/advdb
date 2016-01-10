@@ -196,10 +196,9 @@ Services.service('Data',function($http){
 			return endpoint;
 		},
 		like: function( userId , otherId , dislike ){
-			var endpoint = new_Endpoint();
-			endpoint._fakeResponse({
-				success: true,
-				match: Math.random()<0.5
+			var endpoint = new_Endpoint((dislike?'/remove_match/':'/add_match/') + userId );
+			endpoint.put({
+				"entity_id": otherId
 			});
 			return endpoint;
 		},
