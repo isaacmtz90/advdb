@@ -58,8 +58,6 @@ class Person(Resource):
             user.properties['height']=args['height']
             user.properties['likes'] = user.properties['likes']
             user.push()
-           
-            print (watched_shows[0])
             return ({"Put": user.properties})
         else:
             newPerson = Node(
