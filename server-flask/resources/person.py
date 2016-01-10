@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort, make_response, request
 from flask.ext.restful import Resource, reqparse, fields, marshal, marshal_with
 from database import graphene, data_types
+from collections import namedtuple
 from py2neo import Node, Relationship
 
 graph = graphene.get_database()
@@ -34,10 +35,14 @@ class Person(Resource):
         watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id)
         subgraph_person = watched_shows.to_subgraph()
         nodelist = []
+        u = user.properties
         for node in subgraph_person.nodes:
-            nodelist.append(node.properties)
-        print (nodelist)
-        return user.properties
+            nodelist.append(node.properties['tvshow_id'])
+        
+        u['likes'] = []
+        u['likes'].append({'movies_liked' : self.get_liked_movies(id), 'tvshows_liked': self.get_liked_tvshows(id)})
+        
+        return u
 
     def put(self, id):
         args = self.reqparse.parse_args()
@@ -51,10 +56,9 @@ class Person(Resource):
             user.properties['age']=args['age']
             user.properties['interested_in']=args['interested_in']
             user.properties['height']=args['height']
+            user.properties['likes'] = user.properties['likes']
             user.push()
-            
-            
-            watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=id, B= int(args['entity_id']))
+           
             print (watched_shows[0])
             return ({"Put": user.properties})
         else:
@@ -96,7 +100,26 @@ class Person(Resource):
 
             graph.create(newPerson)
             return ({'created': newPerson.properties}, 200)
-
+        
+        
+    def get_liked_movies (self, personid):
+        watched_moviess= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:Movie) MATCH (a)-[:WATCHED]-(m) return m", A=personid)
+        subgraph_person = watched_moviess.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append(node.properties['movie_id'])
+        return nodelist
+            
+    def get_liked_tvshows(self, personid):
+        watched_shows= cypher.execute("MATCH (a:Person{person_id: {A}}),(m:TV_Show) MATCH (a)-[:WATCHED]-(m) return m", A=personid)
+        subgraph_person = watched_shows.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append(node.properties['tvshow_id'])
+        return nodelist
+    
+    
+    
     def delete(self, id):
         pass
 
