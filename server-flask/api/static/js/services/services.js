@@ -192,7 +192,10 @@ Services.service('Data',function($http){
 		},
 		getSuggestions: function( id , filters ){
 			var endpoint = new_Endpoint('/matches/' + id + '/USER_SUGGESTIONS');
-			endpoint.get();
+			if( filters.gender )
+				endpoint.put( filters )
+			else
+				endpoint.get();
 			return endpoint;
 		},
 		like: function( userId , otherId , dislike ){

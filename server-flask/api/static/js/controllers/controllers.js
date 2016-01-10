@@ -214,6 +214,7 @@ Controllers.controller('searchCtrl', ['$scope','$http','Data','Login',function($
 
 	$scope.go = function(){
 		Login.filters = $scope.search;
+		delete Login.filters.likes;
 		window.location = '#/matches';
 	};	
 
