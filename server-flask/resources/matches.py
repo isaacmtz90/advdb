@@ -133,7 +133,7 @@ class Connect(Resource):
     def delete(self, id):
         pass
 
-class Disonnect(Resource):
+class Disconnect(Resource):
 
     def __init__(self):
         #Request parser to get the params in a sexy way
