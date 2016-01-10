@@ -31,5 +31,5 @@ pip install -r requirements.txt
 then run the app
 
 ```
-python app.y
+python app.py
 ```
