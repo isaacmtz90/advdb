@@ -85,10 +85,10 @@ class Matching(Resource):
     def put(self, id):
         user = graph.find_one('Person', property_key='person_id',
                               property_value=id)
-        test = args['checked'])
+        test = args['checked']
         print test
 
-        elif (cypher_type == 'USER_SUGGESTIONS'):
+        if (cypher_type == 'USER_SUGGESTIONS'):
             u = {}
             u['suggestions'] = []
             u['matches'] = []
