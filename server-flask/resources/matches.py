@@ -25,12 +25,6 @@ class Matching(Resource):
             match = cypher.execute(query)
             print match
 
-        # elif (cypher_type == 'FREE_USERS'):
-        #     query = """MATCH (x:Person) WHERE NOT (x)-[:LIKES]->(y:Person)
-        #             RETURN x"""
-        #     match = cypher.execute(query)
-        #     print match
-        #
         elif (cypher_type == 'USER_LIKES'):
             query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
                     RETURN y.person_id"""
@@ -65,6 +59,12 @@ class Matching(Resource):
                 return ({"error": "No suggestions"})
             return u
         #
+        # elif (cypher_type == 'FREE_USERS'):
+        #     query = """MATCH (x:Person) WHERE NOT (x)-[:LIKES]->(y:Person)
+        #             RETURN x"""
+        #     match = cypher.execute(query)
+        #     print match
+        #
         #
         # elif (cypher_type == 'WATCH_SUGGESTIONS'):
         #     query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y),
@@ -88,7 +88,7 @@ class Matching(Resource):
 
     def get_suggestions (self, person_id):
         query = """MATCH (x:Person {person_id:{x_id}})-[:WATCHED]->(interests)
-                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]-(y)
+                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]->(y)
                 AND x.interested_in = y.gender RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
