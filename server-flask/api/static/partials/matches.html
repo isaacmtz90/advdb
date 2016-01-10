@@ -1,4 +1,14 @@
 <div class="matches">
+	<div ng-if="suggestions.newMatch" class="newmatch-screen">
+		<div class="card">
+			<div class="card-image">
+				<div class="match-pitct" style="background-image: url(http://graph.facebook.com/{{suggestions.newMatch.id}}/picture?width=1000&height=800)"></div>
+			</div>
+			<div class="card-content">
+				<p>Likes you as well!</p>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<div class="section">
 			<div class="row">
@@ -28,6 +38,9 @@
 						</div>
 					</div>
 					<div ng-if="!suggestions.prospect" class="card loading-card">
+						<div ng-if="suggestions.noMoreMatches" class="message">
+							We ran out of people :(
+						</div>
 					</div>
 				</div>
 				<div class="col s12 m2">

@@ -166,14 +166,37 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 		suggestions: null
 	};
 
+	window._X = $scope;
+
+	$scope.getMore = function(){
+		Data.getMatches( Login.user.id , {} ).success(function( response ){
+			$scope.suggestions.suggestions = response.suggestions;
+			if( !response.suggestions.length )
+				$scope.suggestions.noMoreMatches = true;
+			
+			$scope.suggestions.matches = response.matches;
+			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
+			$scope.$digest();
+		});
+	};
+
 	$scope.like = function(){
 		$scope.suggestions.disabled = true;
-		Data.like( Login.user.id , $scope.suggestions.prospect.id , false ).success(function(){
+		Data.like( Login.user.id , $scope.suggestions.prospect.id , false ).success(function( response ){
+			if( response.match ){
+				$scope.suggestions.newMatch = $scope.suggestions.prospect;
+				$scope.suggestions.matches.push($scope.suggestions.newMatch);
+				setTimeout(function(){
+					$scope.suggestions.newMatch = null;
+					$scope.$digest();
+				},5000);
+			}
+
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 			$scope.suggestions.disabled = false;
 			$scope.$digest();
 			if( !$scope.suggestions.prospect ){
-				//get more suggestions
+				$scope.getMore();
 			}
 		});
 	};
@@ -188,7 +211,7 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 			$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
 			$scope.$digest();
 			if( !$scope.suggestions.prospect ){
-				//get more suggestions
+				$scope.getMore();
 			}
 		});
 	};
@@ -197,10 +220,5 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 		window.open( 'http://www.facebook.com/' + element.item.id );
 	};
 
-	Data.getMatches( Login.user.id , {} ).success(function( response ){
-		$scope.suggestions.suggestions = response.suggestions;
-		$scope.suggestions.matches = response.matches;
-		$scope.suggestions.prospect = $scope.suggestions.suggestions.pop();
-		$scope.$digest();
-	});
+	$scope.getMore();
 }]);
