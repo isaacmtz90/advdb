@@ -83,6 +83,9 @@ Services.service('Data',function($http){
 			post_data: post_data,
 			callback: function(){},
 			callbackError: function(){},
+			transform: function( data ){
+				return data;
+			},
 			success: function( callback ){
 				this.callback = callback;
 				return this;
@@ -94,13 +97,13 @@ Services.service('Data',function($http){
 			_fakeResponse: function( data ){
 				var _self = this;
 				setTimeout(function(){
-					_self.callback( data );
+					_self.callback( _self.transform(data)  );
 				},1000);
 			},
 			get: function(){
 				var _self = this;
 				$http.get(this.url).then(function( response ){
-					_self.callback( response );
+					_self.callback( _self.transform(response) );
 				},function(w,t,f){
 					_self.callbackError(w,t,f);
 				})
@@ -116,7 +119,7 @@ Services.service('Data',function($http){
 			put: function( data ){
 				var _self = this;
 				$http.put( this.url , data ).then(function( response ){
-					_self.callback( response );
+					_self.callback( _self.transform(response) );
 				},function(w,t,f){
 					_self.callbackError(w,t,f);
 				})
@@ -142,6 +145,10 @@ Services.service('Data',function($http){
 		//first endpoint to get the user data
 		sendUser: function( user ){
 			var endpoint = new_Endpoint('/user/'+user.id);
+			endpoint.transform = function( response ){
+				response.data.likes = response.data.likes[0];
+				return response;
+			};
 			endpoint.get();
 			return endpoint;
 		},
