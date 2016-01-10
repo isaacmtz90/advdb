@@ -163,7 +163,7 @@ class Connect(Resource):
                 if str(res) == 'true':
                     return ({'success': 'connection created', 'match':res}, 200)
                 else:
-                    return  ({'success': 'connection created'}, 200)
+                    return  ({'success': 'connection created', 'match':res}, 200)
             return  ({'error': 'one or more nodes doesnt exist'}, 400)
     def delete(self, id):
         pass
