@@ -5,8 +5,9 @@ movie_fields = {
     'movie_id': fields.String,
     'title': fields.String,
     'year': fields.Integer,
-    'genre': fields.String,
+    'genre': fields.List(fields.String),
     'picture_url': fields.String
+
     }
 
 
@@ -15,7 +16,7 @@ tvshow_fields = {
     'title': fields.String,
     'year': fields.Integer,
     'seasons': fields.Integer,
-    'genre': fields.String,
+    'genre': fields.List(fields.String),
     'picture_url': fields.String
     }
 
