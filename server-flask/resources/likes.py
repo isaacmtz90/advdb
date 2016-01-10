@@ -34,7 +34,7 @@ class Connect(Resource):
                     return  ({'success': 'connection created'}, 200)
                 return  ({'error': 'one or more nodes doesnt exist'}, 400)
 
-            elif (args['entity_type'].lower == 'movie'):
+            elif (args['entity_type'].lower() == 'movie'):
                 movie = graph.find_one('Movie', property_key='movie_id',
                                   property_value=args['entity_id'])
                 if (movie):
@@ -78,7 +78,7 @@ class Disonnect(Resource):
                     return  ({'success': 'connection removed'}, 200)
                 return  ({'error': 'one or more nodes doesnt exist'}, 400)
 
-            elif (args['entity_type'].lower == 'movie'):
+            elif (args['entity_type'].lower() == 'movie'):
                 movie = graph.find_one('Movie', property_key='movie_id',
                                   property_value=args['entity_id'])
                 if (movie):
