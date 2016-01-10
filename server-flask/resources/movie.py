@@ -18,12 +18,12 @@ class Movie(Resource):
                                    required=True)
         self.reqparse.add_argument('genre', type=list, location='json')
         self.reqparse.add_argument('picture_url', type=str, location='json')
-      
+
         super(Movie, self).__init__()
-        
+
     @marshal_with(data_types.movie_fields)
     def get(self, id):
-    
+
         movie = graph.find_one('Movie', property_key='movie_id',
                                property_value=str(id))
         if not movie:

@@ -12,8 +12,8 @@ class Matching(Resource):
     def __init__(self):
         #Request parser to get the params in a sexy way
         self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('entity_id', type=str, required=True,
-                                   location='json')
+        self.reqparse.add_argument('gender', type=str,
+                                   required=True, location='json')
         self.reqparse.add_argument('checked', type=str, required=True,
                                    location='json')
         super(Matching, self).__init__()
@@ -82,22 +82,26 @@ class Matching(Resource):
         #             count(movie) ORDER BY count(movie) DESC"""
         #     match = cypher.execute(query, x_id = id)
 
-    def put(self, id):
-        user = graph.find_one('Person', property_key='person_id',
-                              property_value=id)
-        print "Hey"
-        test = args['checked']
-        print test
+    def put(self, id, cypher_type):
+        args = self.reqparse.parse_args()
+        gender = args['gender']
+        checked = args['checked']
+        # movies = checked[0]
+        print gender
+        print checked[0]
+        # for x in checked:
+        #     print x
+        # print movies
 
-        if (cypher_type == 'USER_SUGGESTIONS'):
-            u = {}
-            u['suggestions'] = []
-            u['matches'] = []
-            u['suggestions'].append(self.get_suggestions(id))
-            u['matches'].append(self.get_matches(id))
-            if u is None:
-                return ({"error": "No suggestions"})
-            return u
+        # u = {}
+        # u['suggestions'] = []
+        # u['matches'] = []
+        # u['suggestions'].append(self.get_suggestions(id))
+        # u['matches'].append(self.get_matches(id))
+        # if u is None:
+        #     return ({"error": "No suggestions"})
+        # return u
+        return ({'error': 'hmm'}, 200)
 
     def delete(self, id):
         pass

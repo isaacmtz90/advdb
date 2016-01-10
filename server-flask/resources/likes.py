@@ -16,12 +16,13 @@ class Connect(Resource):
         self.reqparse.add_argument('entity_id', type=str, required=True,
                                    location='json')
         super(Connect, self).__init__()
-        
-        
+
+
 
     def put(self, id):
         #todo: clean up this messy code. sorrynotsorry
         args = self.reqparse.parse_args()
+        print args
         person_origin = graph.find_one('Person', property_key='person_id',
                               property_value=id)
         if(person_origin):
@@ -43,10 +44,10 @@ class Connect(Resource):
                     return  ({'success': 'connection created'}, 200)
                 return  ({'error': 'one or more nodes doesnt exist'}, 400)
         return({'error': 'person doesnt exist'}, 400)
-        
+
     def delete(self, id):
         pass
-    
+
 
 class Disonnect(Resource):
 
@@ -58,8 +59,8 @@ class Disonnect(Resource):
         self.reqparse.add_argument('entity_id', type=str, required=True,
                                    location='json')
         super(Disonnect, self).__init__()
-        
-        
+
+
 
     def put(self, id):
         #todo: clean up this messy code. sorrynotsorry
@@ -83,6 +84,6 @@ class Disonnect(Resource):
                     return  ({'success': 'connection removed'}, 200)
                 return  ({'error': 'one or more nodes doesnt exist'}, 400)
         return({'error': 'person doesnt exist'}, 400)
-        
+
     def delete(self, id):
         pass
