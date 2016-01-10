@@ -86,8 +86,8 @@ class Matching(Resource):
         pass
 
     def get_suggestions (self, person_id):
-        query = """MATCH (x {person_id:{x_id}})-[:WATCHED]->(interests)<-[:WATCHED]-(y)
-                WHERE NOT (x)-[:LIKES]-(y) AND x.interested_in = y.gender
+        query = """MATCH (x:Person {person_id:{x_id}})-[:WATCHED]->(interests)
+                <-[:WATCHED]-(y:Person) WHERE NOT (x)-[:LIKES]-(y) AND x.interested_in = y.gender
                 RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
@@ -98,8 +98,8 @@ class Matching(Resource):
         return nodelist
 
     def get_matches(self, person_id):
-        query = query = """MATCH (x_id :Person {person_id:{x_id}})-[:LIKES]->(y)
-                RETURN y"""
+        query = """MATCH (x:Person {person_id:{x_id}})->[r:LIKES]->(y)-
+                [r2:LIKES]->(x) RETURN y"""
         suggestions = cypher.execute(query, x_id = person_id)
         subgraph_person = suggestions.to_subgraph()
         nodelist = []
@@ -141,7 +141,7 @@ class Disonnect(Resource):
         self.reqparse.add_argument('entity_id', type=str, required=True,
                                    location='json')
         super(Disonnect, self).__init__()
-        
+
     def put(self, id):
         args = self.reqparse.parse_args()
         person_origin = graph.find_one('Person', property_key='person_id',
