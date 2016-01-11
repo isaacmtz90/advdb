@@ -2,7 +2,7 @@ from flask import Flask, jsonify, abort, make_response, request
 from flask.ext.restful import  Resource, reqparse, fields, marshal, marshal_with
 from database import graphene, data_types
 from py2neo import Node, Relationship
-import json
+import json, ast
 
 graph = graphene.get_database()
 cypher = graph.cypher
@@ -14,7 +14,7 @@ class Matching(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('gender', type=str,
                                    required=True, location='json')
-        self.reqparse.add_argument('checked', type=str, required=True,
+        self.reqparse.add_argument('checked', required=True, 
                                    location='json')
         super(Matching, self).__init__()
 
@@ -86,9 +86,25 @@ class Matching(Resource):
         args = self.reqparse.parse_args()
         gender = args['gender']
         checked = args['checked']
-        # movies = checked[0]
-        print gender
-        print checked[0]
+        checked_parsed = ast.literal_eval(checked)
+        movies_liked=  checked_parsed['movies_liked']
+        tvshows_liked=  checked_parsed['tvshows_liked']
+        
+        if (cypher_type == 'MATCH_WITH_PARAMS'):
+            u = {}
+            u['suggestions'] = []
+            u['matches'] = []
+            print gender
+            u['suggestions'].append(self.get_suggestions_withparams(id, movies_liked,tvshows_liked,gender))
+            u['matches'].append(self.get_matches(id))
+            if u is None:
+                return ({"error": "No suggestions"})
+            return u
+
+       
+       # movies = checked.movies_liked
+        #print gender
+      #  print movies
         # for x in checked:
         #     print x
         # print movies
@@ -105,6 +121,17 @@ class Matching(Resource):
 
     def delete(self, id):
         pass
+    def get_suggestions_withparams (self, person_id, listmovies, listtvshows, gender):
+        query = """MATCH (x:Person {person_id:{x_id}})-[:WATCHED]->(interests)
+                <-[:WATCHED]-(y:Person) WHERE ((interests.movie_id  IN {lm}) OR (interests.tvshow_id IN {ltv})) AND NOT (x)-[:LIKES]->(y) AND NOT
+                (x)-[:DISLIKES]->(y) AND  y.gender = {g} RETURN y"""
+        suggestions = cypher.execute(query, x_id = person_id, lm= listmovies, ltv = listtvshows, g=gender)
+        subgraph_person = suggestions.to_subgraph()
+        nodelist = []
+        for node in subgraph_person.nodes:
+            nodelist.append({"person_id":node.properties['person_id'],
+                            "name":node.properties['name']})
+        return nodelist
 
     def get_suggestions (self, person_id):
         query = """MATCH (x:Person {person_id:{x_id}})-[:WATCHED]->(interests)
