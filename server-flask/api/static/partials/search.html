@@ -8,7 +8,7 @@
 						ng-model="search.gender" 
 						ng-class="{'has-error': !profile.profile.gender&&profile.validate}">
 						<option 
-						ng-repeat="opt in ['male','female','any']">{{opt}}</option>
+						ng-repeat="opt in ['male','female']">{{opt}}</option>
 					</select>
 					<label for="gender">Gender</label>
 				</div>
@@ -32,7 +32,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in search.likes.movies_liked|interestsort:'movies_liked':search.checked track by $index" >
+							ng-repeat="opt in search.likes.movies_liked track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 
@@ -64,7 +64,7 @@
 				<div class="row">
 					<div class="col s12">
 						<div class="col s3" 
-							ng-repeat="opt in search.likes.tvshows_liked|interestsort:'tvshows_liked':search.checked track by $index" >
+							ng-repeat="opt in search.likes.tvshows_liked track by $index" >
 							<div id="mo{{$index}}" class="card">
 								<div class="card-image">
 									<div class="interest-pict" 

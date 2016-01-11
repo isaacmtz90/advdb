@@ -202,7 +202,9 @@ Controllers.controller('searchCtrl', ['$scope','$http','Data','Login',function($
 		});
 	};
 
-	$scope.checkInterest = function( type , id , event ){
+	$scope.checkInterest = function( type , index , event ){
+		var id = $scope.search.likes[type][index].movie_id ||
+			$scope.search.likes[type][index].tvshow_id;
 		if( $scope.search.checked[type].indexOf(id) != -1 ){
 			$scope.search.checked[type] = $scope.search.checked[type].filter(function(a){
 				return a != id;
