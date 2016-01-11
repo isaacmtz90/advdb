@@ -90,7 +90,7 @@ class Matching(Resource):
         movies_liked=  checked_parsed['movies_liked']
         tvshows_liked=  checked_parsed['tvshows_liked']
         
-        if (cypher_type == 'MATCH_WITH_PARAMS'):
+        if (cypher_type == 'USER_SUGGESTIONS'):
             u = {}
             u['suggestions'] = []
             u['matches'] = []
