@@ -287,7 +287,7 @@ Controllers.controller('matchesCtrl', ['$scope','$http','Data','Login',function(
 	};
 
 	$scope.profile = function( element ){
-		window.open( 'http://www.facebook.com/' + element.item.id );
+		window.open( 'http://www.facebook.com/' + element.item.person_id );
 	};
 
 	$scope.getMore();
