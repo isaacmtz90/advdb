@@ -14,7 +14,7 @@ class Matching(Resource):
         self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument('gender', type=str,
                                    required=True, location='json')
-        self.reqparse.add_argument('checked', required=True, 
+        self.reqparse.add_argument('checked', required=True,
                                    location='json')
         super(Matching, self).__init__()
 
@@ -89,7 +89,7 @@ class Matching(Resource):
         checked_parsed = ast.literal_eval(checked)
         movies_liked=  checked_parsed['movies_liked']
         tvshows_liked=  checked_parsed['tvshows_liked']
-        
+
         if (cypher_type == 'USER_SUGGESTIONS'):
             u = {}
             u['suggestions'] = []
@@ -100,23 +100,6 @@ class Matching(Resource):
             if u is None:
                 return ({"error": "No suggestions"})
             return u
-
-       
-       # movies = checked.movies_liked
-        #print gender
-      #  print movies
-        # for x in checked:
-        #     print x
-        # print movies
-
-        # u = {}
-        # u['suggestions'] = []
-        # u['matches'] = []
-        # u['suggestions'].append(self.get_suggestions(id))
-        # u['matches'].append(self.get_matches(id))
-        # if u is None:
-        #     return ({"error": "No suggestions"})
-        # return u
         return ({'error': 'hmm'}, 200)
 
     def delete(self, id):
