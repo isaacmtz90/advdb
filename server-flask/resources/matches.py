@@ -130,7 +130,7 @@ class Matching(Resource):
         nodelist = []
         for node in subgraph_person.nodes:
             nodelist.append({"person_id":node.properties['person_id'],
-                            "name":node.properties['name']})
+                            "name":node.properties['name'], "age":node.properties['age']})
         return nodelist
 
     def get_suggestions (self, person_id):
@@ -142,7 +142,7 @@ class Matching(Resource):
         nodelist = []
         for node in subgraph_person.nodes:
             nodelist.append({"person_id":node.properties['person_id'],
-                            "name":node.properties['name']})
+                            "name":node.properties['name'], "age":node.properties['age']})
         return nodelist
 
     def get_suggestions_default (self, person_id):
@@ -155,7 +155,7 @@ class Matching(Resource):
         nodelist = []
         for node in subgraph_person.nodes:
             nodelist.append({"person_id":node.properties['person_id'],
-                            "name":node.properties['name']})
+                            "name":node.properties['name'], "age":node.properties['age']})
         return nodelist
 
     def get_matches(self, person_id):
@@ -166,7 +166,7 @@ class Matching(Resource):
         nodelist = []
         for node in subgraph_person.nodes:
             nodelist.append({"person_id":node.properties['person_id'],
-                            "name":node.properties['name']})
+                            "name":node.properties['name'], "age":node.properties['age']})
         return nodelist
 
     def get_dislikes(self, person_id):
@@ -177,7 +177,7 @@ class Matching(Resource):
         nodelist = []
         for node in subgraph_person.nodes:
             nodelist.append({"person_id":node.properties['person_id'],
-                            "name":node.properties['name']})
+                            "name":node.properties['name'], "age":node.properties['age']})
         return nodelist
 
 class Connect(Resource):
